@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using CoopShopInfos.Models;
 
 namespace CoopShopInfos.Models
 {
@@ -14,5 +15,24 @@ namespace CoopShopInfos.Models
         }
 
         public DbSet<CoopShopInfos.Models.Product> Product { get; set; }
+        public DbSet<CoopShopInfos.Models.Product> Shop { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ShopProduct>()
+                .HasKey(sp => new { sp.ShopId, ProductId = sp.Id });
+
+            //modelBuilder.Entity<ShopProduct>()
+            //    .HasOne(sp => sp.Product)
+            //    .WithMany(s => s.ShopProduct)
+            //    .HasForeignKey(sp => sp.Id);
+
+            //modelBuilder.Entity<ShopProduct>()
+            //    .HasOne(sp => sp.Shop)
+            //    .WithMany(s => s.ShopProduct)
+            //    .HasForeignKey(sp => sp.ShopId);
+        }
+
+        public DbSet<CoopShopInfos.Models.Shop> Shop_1 { get; set; }
     }
 }

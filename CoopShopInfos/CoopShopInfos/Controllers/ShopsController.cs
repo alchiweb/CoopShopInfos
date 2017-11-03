@@ -9,22 +9,22 @@ using CoopShopInfos.Models;
 
 namespace CoopShopInfos.Controllers
 {
-    public class ProductsController : Controller
+    public class ShopsController : Controller
     {
         private readonly CoopShopInfosContext _context;
 
-        public ProductsController(CoopShopInfosContext context)
+        public ShopsController(CoopShopInfosContext context)
         {
             _context = context;
         }
 
-        // GET: Products
+        // GET: Shops
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Product.ToListAsync());
+            return View(await _context.Shop_1.ToListAsync());
         }
 
-        // GET: Products/Details/5
+        // GET: Shops/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,39 +32,39 @@ namespace CoopShopInfos.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
-                .SingleOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
+            var shop = await _context.Shop_1
+                .SingleOrDefaultAsync(m => m.ShopId == id);
+            if (shop == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(shop);
         }
 
-        // GET: Products/Create
+        // GET: Shops/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
+        // POST: Shops/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Barcode,ProductName")] Product product)
+        public async Task<IActionResult> Create([Bind("ShopId,ShopName,ShopAddress,ShopPostCode,ShopCity,ShopPhoneNumber")] Shop shop)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
+                _context.Add(shop);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(shop);
         }
 
-        // GET: Products/Edit/5
+        // GET: Shops/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,22 +72,22 @@ namespace CoopShopInfos.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
+            var shop = await _context.Shop_1.SingleOrDefaultAsync(m => m.ShopId == id);
+            if (shop == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(shop);
         }
 
-        // POST: Products/Edit/5
+        // POST: Shops/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Barcode,ProductName")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ShopId,ShopName,ShopAddress,ShopPostCode,ShopCity,ShopPhoneNumber")] Shop shop)
         {
-            if (id != product.ProductId)
+            if (id != shop.ShopId)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace CoopShopInfos.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(shop);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.ProductId))
+                    if (!ShopExists(shop.ShopId))
                     {
                         return NotFound();
                     }
@@ -112,10 +112,10 @@ namespace CoopShopInfos.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(shop);
         }
 
-        // GET: Products/Delete/5
+        // GET: Shops/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -123,30 +123,30 @@ namespace CoopShopInfos.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
-                .SingleOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
+            var shop = await _context.Shop_1
+                .SingleOrDefaultAsync(m => m.ShopId == id);
+            if (shop == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(shop);
         }
 
-        // POST: Products/Delete/5
+        // POST: Shops/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
-            _context.Product.Remove(product);
+            var shop = await _context.Shop_1.SingleOrDefaultAsync(m => m.ShopId == id);
+            _context.Shop_1.Remove(shop);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool ShopExists(int id)
         {
-            return _context.Product.Any(e => e.ProductId == id);
+            return _context.Shop_1.Any(e => e.ShopId == id);
         }
     }
 }

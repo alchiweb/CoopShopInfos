@@ -1,0 +1,48 @@
+﻿@model CoopShopInfos.Models.Shop
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Shop</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ShopName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShopName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShopAddress)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShopAddress)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShopPostCode)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShopPostCode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShopCity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShopCity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShopPhoneNumber)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ShopPhoneNumber)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.ShopId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

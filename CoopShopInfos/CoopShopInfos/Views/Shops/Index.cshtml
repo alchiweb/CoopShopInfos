@@ -1,0 +1,59 @@
+﻿@model IEnumerable<CoopShopInfos.Models.Shop>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShopName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShopAddress)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShopPostCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShopCity)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ShopPhoneNumber)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShopName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShopAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShopPostCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShopCity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShopPhoneNumber)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ShopId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ShopId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ShopId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
