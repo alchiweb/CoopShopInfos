@@ -14,8 +14,8 @@ namespace CoopShopInfos.Models
         {
         }
 
-        public DbSet<CoopShopInfos.Models.Product> Product { get; set; }
-        public DbSet<CoopShopInfos.Models.Product> Shop { get; set; }
+        public DbSet<Product> Product { get; set; }
+        public DbSet<Product> Shop { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +33,6 @@ namespace CoopShopInfos.Models
             //    .HasForeignKey(sp => sp.ShopId);
         }
 
-        public DbSet<CoopShopInfos.Models.Shop> Shop_1 { get; set; }
+        public DbSet<Shop> Shop_1 { get; set; }
     }
 }

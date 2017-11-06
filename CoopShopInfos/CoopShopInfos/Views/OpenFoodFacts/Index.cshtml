@@ -1,0 +1,41 @@
+﻿@using WebClientAPI.Models
+@model WebClientAPI.Models.OpenFoodProduct
+
+@{  var imagePath= Model.product.image_url;
+    
+}
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Open Food Facts</title>
+</head>
+<body>
+<div>
+    <div>
+        @Html.DisplayFor(model => model.product.product_name_fr)
+    </div>
+    <div>
+        <img src="@imagePath"/>
+    </div>
+    <div>
+        Code Barre :
+        @Html.DisplayFor(model => model.product.code)
+    </div>
+    <div>
+        Marque :
+        @Html.DisplayFor(model => model.product.brands)
+    </div>
+    <div>
+        Catégories :
+        @Html.DisplayFor(model => model.product.categories)
+    </div>
+
+</div>
+</body>
+</html>
