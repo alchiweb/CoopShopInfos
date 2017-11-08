@@ -1,17 +1,47 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
 using CoopShopInfos.Models;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using WebClientAPI.Models;
+using OpenFoodAPI.Models;
 
-namespace WebClientAPI.Controllers
+namespace CoopShopInfos.Controllers
 {
     public class OpenFoodFactsController : Controller
     {
-        public IActionResult Index()
+        private readonly CoopShopInfosContext _context;
+
+        public OpenFoodFactsController(CoopShopInfosContext context)
+        {
+            _context = context;
+        }
+        //public IActionResult Index(string searchedBarcode)
+        //{
+            //using (var client = new HttpClient())
+            //{
+            //    client.DefaultRequestHeaders.Accept.Clear();
+            //    client.DefaultRequestHeaders.Accept.Add(
+            //        new MediaTypeWithQualityHeaderValue("application/json"));
+
+            //    var url = string.Concat("https://fr.openfoodfacts.org/api/v0/produit/", searchedBarcode, ".json");
+
+            //    var response = client.GetAsync
+            //        (url).Result;
+            //    var stringData = response.Content.
+            //        ReadAsStringAsync().Result;
+            //    var data = JsonConvert.DeserializeObject
+            //        <OpenFoodProduct>(stringData);
+
+            //    //JsonConvert.PopulateObject(stringData, data);
+            //    return View(data);
+            //}
+
+
+
+        //}
+
+
+        public IActionResult ShowProduct(string barcode)
         {
             using (var client = new HttpClient())
             {
@@ -19,9 +49,9 @@ namespace WebClientAPI.Controllers
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
 
-
+                var url = string.Concat("https://fr.openfoodfacts.org/api/v0/produit/", barcode, ".json");
                 var response = client.GetAsync
-                    ("https://fr.openfoodfacts.org/api/v0/produit/3029330003533.json").Result;
+                    (url).Result;
                 var stringData = response.Content.
                     ReadAsStringAsync().Result;
                 var data = JsonConvert.DeserializeObject
@@ -30,9 +60,12 @@ namespace WebClientAPI.Controllers
                 //JsonConvert.PopulateObject(stringData, data);
                 return View(data);
             }
-            
+
+
+
         }
 
-        
+
+
     }
 }

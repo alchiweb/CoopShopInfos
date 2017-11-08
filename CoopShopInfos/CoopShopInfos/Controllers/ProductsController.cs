@@ -6,6 +6,7 @@ using CoopShopInfos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.JavaScript.DataVisualization;
 
 namespace CoopShopInfos.Controllers
 {
@@ -21,6 +22,14 @@ namespace CoopShopInfos.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
+            var product = new Product
+            {
+                Barcode = "Titi",
+                ProductName = "Toto"
+            };
+            _context.Add(product);
+            await _context.SaveChangesAsync();
+
             return View(await _context.Product.ToListAsync());
         }
 
