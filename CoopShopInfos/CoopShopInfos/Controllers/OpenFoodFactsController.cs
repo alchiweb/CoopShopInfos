@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using CoopShopInfos.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis;
+using Newtonsoft.Json;
+using OpenFoodAPI.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using CoopShopInfos.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using OpenFoodAPI.Models;
 
 namespace CoopShopInfos.Controllers
 {
@@ -66,10 +64,19 @@ namespace CoopShopInfos.Controllers
         }
 
         [HttpPost]
-        public IActionResult ShowProduct(ProductSheetViewModel model)
+        public IActionResult SaveProduct(string barcode, string productname)
         {
-           
+            if (!ProductExists(barcode))
+            {
 
+                var product = new Models.Product
+                {
+                    Barcode = barcode,
+                    ProductName = productname
+                };
+                _context.Add(product);
+                _context.SaveChanges();
+            }
 
             //ViewBag.Result = i > 0 ? "Data Saved Successfully" : "Something Went Wrong";
 
