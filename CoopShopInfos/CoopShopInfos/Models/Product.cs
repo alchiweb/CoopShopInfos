@@ -11,5 +11,7 @@ namespace CoopShopInfos.Models
         [Required, StringLength(100)]
         public string ProductName { get; set; }
         public ICollection<ShopProduct> ShopProduct { get; set; }
+
+
     }
 }

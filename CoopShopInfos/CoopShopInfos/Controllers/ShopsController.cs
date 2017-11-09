@@ -21,7 +21,7 @@ namespace CoopShopInfos.Controllers
         // GET: Shops
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Shop_1.ToListAsync());
+            return View(await _context.Shop.ToListAsync());
         }
 
         // GET: Shops/Details/5
@@ -32,7 +32,7 @@ namespace CoopShopInfos.Controllers
                 return NotFound();
             }
 
-            var shop = await _context.Shop_1
+            var shop = await _context.Shop
                 .SingleOrDefaultAsync(m => m.ShopId == id);
             if (shop == null)
             {
@@ -72,7 +72,7 @@ namespace CoopShopInfos.Controllers
                 return NotFound();
             }
 
-            var shop = await _context.Shop_1.SingleOrDefaultAsync(m => m.ShopId == id);
+            var shop = await _context.Shop.SingleOrDefaultAsync(m => m.ShopId == id);
             if (shop == null)
             {
                 return NotFound();
@@ -123,7 +123,7 @@ namespace CoopShopInfos.Controllers
                 return NotFound();
             }
 
-            var shop = await _context.Shop_1
+            var shop = await _context.Shop
                 .SingleOrDefaultAsync(m => m.ShopId == id);
             if (shop == null)
             {
@@ -138,15 +138,15 @@ namespace CoopShopInfos.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var shop = await _context.Shop_1.SingleOrDefaultAsync(m => m.ShopId == id);
-            _context.Shop_1.Remove(shop);
+            var shop = await _context.Shop.SingleOrDefaultAsync(m => m.ShopId == id);
+            _context.Shop.Remove(shop);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ShopExists(int id)
         {
-            return _context.Shop_1.Any(e => e.ShopId == id);
+            return _context.Shop.Any(e => e.ShopId == id);
         }
     }
 }

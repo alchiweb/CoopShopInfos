@@ -1,5 +1,3 @@
-using System;
-
 namespace CoopShopInfos.Models
 {
     public class ErrorViewModel
