@@ -7,7 +7,8 @@ namespace CoopShopInfos.Models
 {
     public class ProductSheetViewModel
     {
-        [DisplayName("Nom du produit")]
+        public int ProductID { get; set; }
+        [DisplayName("Nom du produit"), Required]
         public string ProductName { get; set; }
         public string ImageUrl { get; set; }
         [DisplayName("Code barre")]
@@ -16,8 +17,7 @@ namespace CoopShopInfos.Models
         public string Categories { get; set; }
         [Required]
         public decimal Price { get; set; }
-        [Required]
-        public int ShopId { get; set; }
-        public string ShopName{ get; set; }
+        public string SelectedAnswer { get; set; }
+        public List<Shop> ShopList { get; set; }
     }
 }

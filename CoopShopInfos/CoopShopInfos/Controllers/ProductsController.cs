@@ -84,36 +84,67 @@ namespace CoopShopInfos.Controllers
         // POST: Products/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Barcode,ProductName")] Product product)
+        //{
+        //if (id != product.ProductId)
+        //{
+        //    return NotFound();
+        //}
+
+        //if (ModelState.IsValid)
+        //{
+        //    try
+        //    {
+        //        _context.Update(product);
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!ProductExists(product.ProductId))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+        //    return RedirectToAction(nameof(Index));
+        //}
+        //return View(product);
+
+        //}
+
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Barcode,ProductName")] Product product)
+        public async Task<IActionResult> EditPost(int? id)
         {
-            if (id != product.ProductId)
+            if (id == null)
             {
                 return NotFound();
             }
-
-            if (ModelState.IsValid)
+            var productToUpdate = await _context.Product.SingleOrDefaultAsync(s => s.ProductId == id);
+            if (await TryUpdateModelAsync<Product>(
+                productToUpdate,
+                "",
+                s => s.Barcode, s => s.ProductName))
             {
                 try
                 {
-                    _context.Update(product);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException /* ex */)
                 {
-                    if (!ProductExists(product.ProductId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                                                 "Try again, and if the problem persists, " +
+                                                 "see your system administrator.");
                 }
-                return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(productToUpdate);
         }
 
         // GET: Products/Delete/5

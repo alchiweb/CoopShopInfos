@@ -21,7 +21,7 @@ namespace CoopShopInfos.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ShopProduct>()
-                .HasKey(sp => new { sp.ShopId, ProductId = sp.Id });
+                .HasKey(sp => new { sp.ShopId, sp.ProductId });
 
             //modelBuilder.Entity<ShopProduct>()
             //    .HasOne(sp => sp.Product)

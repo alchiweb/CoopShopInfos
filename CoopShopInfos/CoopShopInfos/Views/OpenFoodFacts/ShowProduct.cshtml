@@ -1,4 +1,5 @@
-﻿@using Microsoft.AspNetCore.Mvc.Rendering
+﻿@using System.Linq
+@using Microsoft.AspNetCore.Mvc.Rendering
 @model ProductSheetViewModel
 
 @{  var imagePath= Model.ImageUrl;
@@ -27,6 +28,10 @@
         <form asp-action="SaveProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="ProductID" class="control-label"></label>
+                <input asp-for="ProductID" class="form-control" name="productid" />
+                <span asp-validation-for="ProductID" class="text-danger" type="hidden"></span>
+                
                 <label asp-for="BarCode" class="control-label"></label>
                 <input asp-for="BarCode" class="form-control" name="barcode" />
                 <span asp-validation-for="BarCode" class="text-danger"></span>
@@ -49,9 +54,18 @@
                 <input asp-for="Price" class="form-control" name="price"/>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
-            <div>
-                <select asp-for ="ShopId"
-                        asp-items="@(new SelectList(ViewBag.ShopList, "ShopId", "ShopName"))"></select>
+            <div class="checkbox">
+                @{
+                    for (var j = 0; j < Model.ShopList.Count(); j++)
+                    {
+                        @Html.RadioButton("shopid", Model.ShopList[j].ShopId, new {id="rbShopId_" + Model.ShopList[j].ShopId});
+                        @Html.Label("lblShopId_" + Model.ShopList[j].ShopId, Model.ShopList[j].ShopName, new{ @for= "rbShopId_" + Model.ShopList[j].ShopId });
+                        //<input asp-for="SelectedAnswer" name="shopid" value="@Model.ShopList[j].ShopId" type="radio" >
+                        //<label asp-for="@Model.ShopList[j].ShopId">@Model.ShopList[j].ShopName</label>
+                    }
+                   
+                }
+               
             </div>
 
             <div class="form-group">
