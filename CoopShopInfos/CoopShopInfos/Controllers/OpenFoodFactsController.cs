@@ -1,18 +1,12 @@
-﻿using System;
-using CoopShopInfos.Models;
+﻿using CoopShopInfos.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using OpenFoodAPI.Models;
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CoopShopInfos.Controllers
 {
@@ -79,8 +73,6 @@ namespace CoopShopInfos.Controllers
                 try
                 {
                     _context.Add(product);
-
-                    //SavePrice(price, product);
                     await _context.SaveChangesAsync();
                 }
                 catch (Exception /* dex */)
@@ -139,7 +131,6 @@ namespace CoopShopInfos.Controllers
             {
                 ShopId = shopid,
                 ProductId = product.ProductId,
-                Product = product,
                 Price = price
             };
 

@@ -13,10 +13,15 @@
     <PackageReference Include="Syncfusion.EJ.AspNet.Core" Version="15.3600.0.33" />
     <PackageReference Include="System.Runtime.Serialization.Json" Version="4.3.0" />
     <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+    <PackageReference Include="ZXing.Net" Version="0.16.2" />
   </ItemGroup>
 
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\barcodeinput.html" />
   </ItemGroup>
 
 </Project>
