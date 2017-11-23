@@ -20,56 +20,58 @@ namespace CoopShopInfos.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(Product model, IFormFile fichier)
+        public IActionResult Index(Product model, IFormFile fichier, string codeBarre)
         {
-            //ajouter la récupération du fichier grâcce à la requete
-            
 
 
-            List<BarcodeFormat> codeFormats = new List<BarcodeFormat>();
-            codeFormats.Add(BarcodeFormat.EAN_13);
+            // Server Side barcode scanning
+            //List<BarcodeFormat> codeFormats = new List<BarcodeFormat>();
+            //codeFormats.Add(BarcodeFormat.EAN_13);
 
-            // create a barcode reader instance
-            var barcodeReader = new BarcodeReader
-            {
-                
-//                AutoRotate = true,
-//                TryInverted = true,
-                Options = {PossibleFormats = codeFormats,
-                    //                    TryHarder = true,
-                    //                    ReturnCodabarStartEnd = true,
+            //// create a barcode reader instance
+            //var barcodeReader = new BarcodeReader
+            //{
+
+            //    //AutoRotate = true,
+            //    //TryInverted = true,
+            //    Options = {PossibleFormats = codeFormats,
+            //        //                    TryHarder = true,
+            //        //                    ReturnCodabarStartEnd = true,
                     
-                    PureBarcode = true}
-            };
+            //        PureBarcode = true}
+            //};
 
-            // create an in memory bitmap
-            //            var barcodeBitmap = (Bitmap)Image.FromFile(@"C:\Users\marin\Source\Repos\CoopShopInfo\CoopShopInfos\CoopShopInfos\wwwroot\images\IMG_20171120_122847_petit.jpg");
+            //// create an in memory bitmap
+            ////            var barcodeBitmap = (Bitmap)Image.FromFile(@"C:\Users\marin\Source\Repos\CoopShopInfo\CoopShopInfos\CoopShopInfos\wwwroot\images\IMG_20171120_122847_petit.jpg");
 
-            Result barcodeResult = null;
-            using (var mStream = new MemoryStream())
+            //Result barcodeResult = null;
+            //using (var mStream = new MemoryStream())
+            //{
+            //    fichier.CopyTo(mStream);
+            //    // create an in memory bitmap
+            //    var barcodeBitmap = (Bitmap)Image.FromStream(mStream);
+
+            //    // decode the barcode from the in memory bitmap
+            //    barcodeReader.ResultPointFound += BarcodeReader_ResultPointFound;
+            //    barcodeReader.ResultFound += BarcodeReader_ResultFound;
+            //    barcodeResult = barcodeReader.Decode(barcodeBitmap);
+
+            //}
+            //// output results to console
+            //Console.WriteLine($"Decoded barcode text: {barcodeResult?.Text}");
+            //Console.WriteLine($"Barcode format: {barcodeResult?.BarcodeFormat}");
+
+
+
+            if (codeBarre != null)
             {
-                fichier.CopyTo(mStream);
-                // create an in memory bitmap
-                var barcodeBitmap = (Bitmap) Image.FromStream(mStream);
+                var values = new RouteValueDictionary
+                {
 
-                // decode the barcode from the in memory bitmap
-                barcodeReader.ResultPointFound += BarcodeReader_ResultPointFound;
-                barcodeReader.ResultFound += BarcodeReader_ResultFound;
-                barcodeResult = barcodeReader.Decode(barcodeBitmap);
-
-            }
-            // output results to console
-            Console.WriteLine($"Decoded barcode text: {barcodeResult?.Text}");
-            Console.WriteLine($"Barcode format: {barcodeResult?.BarcodeFormat}");
-
-
-
-            if (barcodeResult != null)
-            {
-                var values = new RouteValueDictionary();
-
-                //values.Add("barcode",$"{model.Barcode}");
-                values.Add("barcode", $"{barcodeResult.Text}");
+                    //values.Add("barcode",$"{model.Barcode}");
+                    //values.Add("barcode", $"{barcodeResult.Text}");
+                    { "barcode", codeBarre }
+                };
 
                 //return Content($"{model.Barcode}");
                 return RedirectToAction("ShowProduct", "OpenFoodFacts", values); 

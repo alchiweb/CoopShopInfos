@@ -22,6 +22,27 @@ namespace CoopShopInfos.Controllers
 
         public IActionResult ShowProduct(string barcode)
         {
+            // Search if the product that was scanned already is in Product table
+            var product = _context.Product.FirstOrDefault(e => e.Barcode == barcode);
+
+            // Getting data from Shop table using Ef Core and inserting Select item into shopList
+            var shopList = (from shop in _context.Shop select shop).ToList();
+
+            // If the product is already registred
+            if (product != null)
+            {
+                var productSheetVM = new ProductSheetViewModel
+                {
+                    ProductName = product.ProductName,
+                    BarCode = product.Barcode,
+                    ShopList = shopList,
+                    SelectedAnswer = string.Empty
+
+                };
+                return View(productSheetVM);
+            }
+
+            // If the product is not registred in database, try to find it on OpenFoodFact API
             using (var client = new HttpClient())
             {
                 // Define request header
@@ -38,22 +59,39 @@ namespace CoopShopInfos.Controllers
                     <OpenFoodProduct>(stringData);
 
                 // Getting data from Shop table using Ef Core and inserting Select item into shopList
-                var shopList = (from shop in _context.Shop select shop).ToList();
+                shopList = (from shop in _context.Shop select shop).ToList();
 
-                var productSheetVM = new ProductSheetViewModel
+                // If the product is found in OpenFoodFacts, show data
+                if (data.status == 1)
                 {
-                    ProductName = data?.product?.product_name_fr,
-                    ImageUrl = data?.product?.image_url,
-                    BarCode = data?.product?.code,
-                    Brand = data?.product?.brands,
-                    Categories = data?.product?.categories,
-                    ShopList = shopList,
-                    SelectedAnswer = string.Empty
+                    var productSheetVM = new ProductSheetViewModel
+                    {
+                        ProductName = data?.product?.product_name_fr,
+                        ImageUrl = data?.product?.image_url,
+                        BarCode = data?.product?.code,
+                        Brand = data?.product?.brands,
+                        Categories = data?.product?.categories,
+                        ShopList = shopList,
+                        SelectedAnswer = string.Empty
 
-                };
+                    };
+                    return View(productSheetVM);
+                }
+                // If product not found in OpenFacts, show view with only the barcode, the user will have to input the other fields
+                else if (data.status == 0)
+                {
+                    var productSheetVM = new ProductSheetViewModel
+                    {
+                        BarCode = barcode,
+                        ShopList = shopList,
+                        SelectedAnswer = string.Empty
 
-                return View(productSheetVM);
+                    };
+                    return View(productSheetVM);
+                }
+
             }
+            return View();
         }
 
         [HttpPost]

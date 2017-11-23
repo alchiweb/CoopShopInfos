@@ -10,20 +10,21 @@
 <html>
 <head>
     <title>Enter Barcode</title>
-    <script type="text/javascript" src="lib\jquery\dist\jquery.min.js"></script>
-    <script type="text/javascript" src="lib\bootstrap\dist\js\bootstrap.min.js"></script>
-    <link rel="stylesheet" href="lib\bootstrap\dist\css\bootstrap.min.css">
-    <script type="text/javascript" src="lib\serratus-quaggaJS-eff0c5a\dist\quagga.js"></script>
+    <script type="text/javascript" src="\lib\jquery\dist\jquery.min.js"></script>
+    <script type="text/javascript" src="\lib\bootstrap\dist\js\bootstrap.min.js"></script>
+    <link rel="stylesheet" href="\lib\bootstrap\dist\css\bootstrap.min.css">
+    <script type="text/javascript" src="\lib\serratus-quaggaJS-eff0c5a\dist\quagga.js"></script>
 
-    <link rel="stylesheet" href="lib\font-awesome-4.7.0\css\font-awesome.min.css">
+    <link rel="stylesheet" href="\lib\font-awesome-4.7.0\css\font-awesome.min.css">
 </head>
 <body>
 
 <div>
+    <form asp-action="Index" method="post" id="form" enctype="multipart/form-data">
     <div class="row">
         <div class="col-lg-6">
             <div class="input-group">
-                <input id="scanner_input" class="form-control" placeholder="Click the button to scan an EAN..." type="text"/>
+                <input id="scanner_input" name="codeBarre" class="form-control" placeholder="Click the button to scan an EAN..." type="text"/>
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button" data-toggle="modal" data-target="#livestream_scanner">
                         <i class="fa fa-barcode"></i>
@@ -48,14 +49,17 @@
                 <div class="modal-footer">
                     <label class="btn btn-default pull-left">
                         <i class="fa fa-camera"></i> Use camera app
-                        <input type="file" accept="image/*" capture="camera" class="hidden"/>
+                        <input type="file" name="fichier" accept="image/*" capture="camera" class="hidden"/>
                     </label>
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
+        </div><!-- /.modal -->
+        <div>
+            <input type="submit" value="Show Product" class="btn btn-default" />
+        </div>
+    </form>
 
 
     <style>
@@ -89,8 +93,8 @@
              },
                 locate: true
             };
-            // The fallback to the file API requires a different inputStream option. 
-            // The rest is the same 
+            // The fallback to the file API requires a different inputStream option.
+            // The rest is the same
             var fileConfig = $.extend(
                 {},
                 liveStreamConfig,
@@ -122,7 +126,7 @@
                     );
                 });
 
-            // Make sure, QuaggaJS draws frames an lines around possible 
+            // Make sure, QuaggaJS draws frames an lines around possible
             // barcodes on the live stream
             Quagga.onProcessed(function(result) {
                 var drawingCtx = Quagga.canvas.ctx.overlay,
@@ -160,8 +164,8 @@
                 }
             });
 
-            // Once a barcode had been read successfully, stop quagga and 
-            // close the modal after a second to let the user notice where 
+            // Once a barcode had been read successfully, stop quagga and
+            // close the modal after a second to let the user notice where
             // the barcode had actually been found.
             Quagga.onDetected(function(result) {
                 if (result.codeResult.code) {
@@ -179,7 +183,7 @@
                     }
                 });
 
-            // Call Quagga.decodeSingle() for every file selected in the 
+            // Call Quagga.decodeSingle() for every file selected in the
             // file input
             $("#livestream_scanner input:file").on("change",
                 function (e) {
@@ -192,7 +196,7 @@
     </script>
 
 
-    <form asp-action="Index" method="post" id="form" enctype="multipart/form-data">
+<!--   <form asp-action="Index" method="post" id="form" enctype="multipart/form-data">
 
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
@@ -200,7 +204,7 @@
             <input asp-for="Barcode" class="form-control" name="barcode"/>
             <span asp-validation-for="Barcode" class="text-danger"></span>
 
-            <!-- ajouter la balise input de type file -->
+            
             <input type="file" name="fichier"/>
             <input type="submit" value="Upload"/>
 
@@ -208,8 +212,9 @@
 
         <div class="form-group">
             <input type="submit" value="Show Product" class="btn btn-default"/>
-        </div>
+    </div>
     </form>
+--> 
 </div>
 </body>
 </html>
