@@ -7,6 +7,8 @@ using CoopShopInfos.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +31,7 @@ namespace CoopShopInfos
 
             services.AddDbContext<CoopShopInfosContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("CoopShopInfosContext")));
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,7 +70,6 @@ namespace CoopShopInfos
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
 
-           
             
         }
     }
