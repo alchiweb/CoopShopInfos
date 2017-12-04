@@ -19,5 +19,6 @@ namespace CoopShopInfos.Models
         public string ShopCity { get; set; }
         public string ShopPhoneNumber{ get; set; }
         public ICollection<ShopProduct> ShopProduct { get; set; }
+        public ICollection<Category> Categories { get; set; }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CoopShopInfos.Models
 {
@@ -14,5 +10,6 @@ namespace CoopShopInfos.Models
         public int ShopId { get; set; }
         public Shop Shop { get; set; }
         public decimal Price { get; set; }
+        //public DateTime Time { get; set; }
     }
 }

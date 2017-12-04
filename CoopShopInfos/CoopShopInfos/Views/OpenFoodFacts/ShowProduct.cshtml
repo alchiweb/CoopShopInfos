@@ -14,67 +14,86 @@
 
 <html>
 <head>
-    <title>Open Food Facts</title>
+    <title>Product Sheet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <script type="text/javascript" src="\lib\jquery\dist\jquery.min.js"></script>
+    <script type="text/javascript" src="\lib\bootstrap\dist\js\bootstrap.min.js"></script>
+    <link rel="stylesheet" href="\lib\bootstrap\dist\css\bootstrap.min.css">
 </head>
 <body>
 <div>
-    <div>
-        @Html.DisplayFor(model => model.ProductName)
-    </div>
-    <div>
-        <img src="@imagePath"/>
-    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>
+                @Html.DisplayFor(model => model.ProductName)
+            </h2>
+        </div><!--/.col-md-6 -->
+    </div><!--row -->
     <div>
         <form asp-action="SaveProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProductID" class="control-label"></label>
-                <input asp-for="ProductID" class="form-control" name="productid" />
-                <span asp-validation-for="ProductID" class="text-danger" type="hidden"></span>
-                
-                <label asp-for="BarCode" class="control-label"></label>
-                <input asp-for="BarCode" class="form-control" name="barcode" />
-                <span asp-validation-for="BarCode" class="text-danger"></span>
-                
-                <label asp-for="ProductName" class="control-label"></label>
-                <input asp-for="ProductName" class="form-control" name="productname" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-4">
+                    <div>
+                        <img id="productImage" src="@imagePath" width="200" heigth="200" alt="Product Image"/>
+                    </div>
+                </div><!--/.col-md-6 -->
+                <div class="col-md-6">
+                    <div class="form-group">
 
-               
-                <div>
-                    Marque :
-                    @Html.DisplayFor(model => model.Brand)
-                </div>
-                <div>
-                    Catégories :
-                    @Html.DisplayFor(model => model.Categories)
-                </div>
+                        <label asp-for="BarCode" class="control-label"></label>
+                        <input asp-for="BarCode" class="form-control" name="barcode"/>
+                        <span asp-validation-for="BarCode" class="text-danger"></span>
 
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" name="price"/>
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="checkbox">
-                @{
-                    for (var j = 0; j < Model.ShopList.Count(); j++)
-                    {
-                        @Html.RadioButton("shopid", Model.ShopList[j].ShopId, new {id="rbShopId_" + Model.ShopList[j].ShopId});
-                        @Html.Label("lblShopId_" + Model.ShopList[j].ShopId, Model.ShopList[j].ShopName, new{ @for= "rbShopId_" + Model.ShopList[j].ShopId });
-                        //<input asp-for="SelectedAnswer" name="shopid" value="@Model.ShopList[j].ShopId" type="radio" >
-                        //<label asp-for="@Model.ShopList[j].ShopId">@Model.ShopList[j].ShopName</label>
-                    }
-                   
-                }
-               
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save Product" class="btn btn-default"/>
-            </div>
+                        <label asp-for="ProductName" class="control-label"></label>
+                        <input asp-for="ProductName" class="form-control" name="productname"/>
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+                        <div>
+                            Marque :
+                            @Html.DisplayFor(model => model.Brand)
+                        </div>
+                        <div>
+                            Catégories :
+                            @Html.DisplayFor(model => model.Categories)
+                        </div>
+                        <div class="checkbox">
+                            @{
+                                for (var j = 0; j < Model.ShopList.Count(); j++)
+                                {
+                                    @Html.RadioButton("shopid", Model.ShopList[j].ShopId, new { id = "rbShopId_" + Model.ShopList[j].ShopId })
+                                    ;
+                                    @Html.Label("lblShopId_" + Model.ShopList[j].ShopId, Model.ShopList[j].ShopName, new { @for = "rbShopId_" + Model.ShopList[j].ShopId })
+                                    ;
+                                    //<input asp-for="SelectedAnswer" name="shopid" value="@Model.ShopList[j].ShopId" type="radio" >
+                                    //<label asp-for="@Model.ShopList[j].ShopId">@Model.ShopList[j].ShopName</label>
+                                }
+                            }
+                        </div>
+                        <label asp-for="Price" class="control-label"></label>
+                        <input asp-for="Price" class="form-control" name="price"/>
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div><!--form group -->
+                </div><!--col-md-6 -->
+            </div><!--row -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="submit" value="Save Product" class="btn btn-danger"/>
+                    </div>
+                </div><!--col-md-6 -->
+            </div><!--row -->
         </form>
     </div>
 
 </div>
 <h2 style="font-style:italic; color:deeppink">@ViewBag.Result</h2>
+
+<script type="text/javascript">
+     jQuery(document).ready(function () {
+        $("img").on("error",(function(){
+            $(this).attr("src", "\images\placeholder_kitten-700_500.jpg");
+        }));
+     });
+</script>
 </body>
 </html>
