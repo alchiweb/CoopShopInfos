@@ -48,10 +48,19 @@
                         <label asp-for="ProductName" class="control-label"></label>
                         <input asp-for="ProductName" class="form-control" name="productname"/>
                         <span asp-validation-for="ProductName" class="text-danger"></span>
-                        <div>
-                            Marque :
-                            @Html.DisplayFor(model => model.Brand)
-                        </div>
+
+                        <label asp-for="Brand" class="control-label"></label>
+                        <input asp-for="Brand" class="form-control" name="brand" />
+                        <span asp-validation-for="Brand" class="text-danger"></span>
+                    
+                        <label asp-for="Categories" class="control-label"></label>
+                        <input asp-for="Categories" class="form-control" name="categories" />
+                        <span asp-validation-for="Categories" class="text-danger"></span>
+                    
+                        <label asp-for="ImageUrl" class="control-label"></label>
+                        <input asp-for="ImageUrl" class="form-control" name="imageurl" />
+                        <span asp-validation-for="ImageUrl" class="text-danger" type="hidden"></span>
+
                         <div>
                             Catégories :
                             @Html.DisplayFor(model => model.Categories)

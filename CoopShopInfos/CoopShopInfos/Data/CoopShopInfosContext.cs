@@ -34,5 +34,9 @@ namespace CoopShopInfos.Models
             //    .HasForeignKey(sp => sp.ShopId);
         }
 
+        public DbSet<CoopShopInfos.Models.Category> Category { get; set; }
+
+        public DbSet<CoopShopInfos.Models.Price> Price { get; set; }
+
     }
 }

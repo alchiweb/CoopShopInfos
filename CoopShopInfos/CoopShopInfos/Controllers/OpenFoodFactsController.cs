@@ -62,32 +62,34 @@ namespace CoopShopInfos.Controllers
                 shopList = (from shop in _context.Shop select shop).ToList();
 
                 // If the product is found in OpenFoodFacts, show data
-                if (data.status == 1)
+                switch (data.status)
                 {
-                    var productSheetVM = new ProductSheetViewModel
+                    case 1:
                     {
-                        ProductName = data?.product?.product_name_fr,
-                        ImageUrl = data?.product?.image_url,
-                        BarCode = data?.product?.code,
-                        Brand = data?.product?.brands,
-                        Categories = data?.product?.categories,
-                        ShopList = shopList,
-                        SelectedAnswer = string.Empty
+                        var productSheetVM = new ProductSheetViewModel
+                        {
+                            ProductName = data?.product?.product_name_fr,
+                            ImageUrl = data?.product?.image_url,
+                            BarCode = data?.product?.code,
+                            Brand = data?.product?.brands,
+                            Categories = data?.product?.categories,
+                            ShopList = shopList,
+                            SelectedAnswer = string.Empty
 
-                    };
-                    return View(productSheetVM);
-                }
-                // If product not found in OpenFacts, show view with only the barcode, the user will have to input the other fields
-                else if (data.status == 0)
-                {
-                    var productSheetVM = new ProductSheetViewModel
+                        };
+                        return View(productSheetVM);
+                    }
+                    case 0:
                     {
-                        BarCode = barcode,
-                        ShopList = shopList,
-                        SelectedAnswer = string.Empty
+                        var productSheetVM = new ProductSheetViewModel
+                        {
+                            BarCode = barcode,
+                            ShopList = shopList,
+                            SelectedAnswer = string.Empty
 
-                    };
-                    return View(productSheetVM);
+                        };
+                        return View(productSheetVM);
+                    }
                 }
 
             }
@@ -95,7 +97,7 @@ namespace CoopShopInfos.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveProduct(int productid, string barcode, string productname, decimal price,
+        public async Task<IActionResult> SaveProduct(int productid, string barcode, string productname, decimal price, float quantity, string imageurl,
             int shopid)
         {
             var product = _context.Product.FirstOrDefault(e => e.Barcode == barcode);
@@ -105,7 +107,9 @@ namespace CoopShopInfos.Controllers
                 product = new Models.Product
                 {
                     Barcode = barcode,
-                    ProductName = productname
+                    ProductName = productname,
+                    Quantity = quantity,
+                    ImageUrl = imageurl
                 };
 
                 try
@@ -143,8 +147,8 @@ namespace CoopShopInfos.Controllers
 
                 if (priceToUpdate != null)
                 {
-                    priceToUpdate.Price = price;
-                    _context.Update(priceToUpdate);
+                    //priceToUpdate.Price = price;
+                    //_context.Update(priceToUpdate);
                     try
                     {
                         await _context.SaveChangesAsync();
@@ -169,7 +173,7 @@ namespace CoopShopInfos.Controllers
             {
                 ShopId = shopid,
                 ProductId = product.ProductId,
-                Price = price
+                //Price = price
             };
 
             _context.Add(shopProduct);

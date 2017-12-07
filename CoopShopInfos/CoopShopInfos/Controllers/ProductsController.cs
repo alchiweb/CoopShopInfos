@@ -54,7 +54,7 @@ namespace CoopShopInfos.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Barcode,ProductName")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Barcode,ProductName,ImageUrl,Qauntity,Unit")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -78,74 +78,79 @@ namespace CoopShopInfos.Controllers
             {
                 return NotFound();
             }
+           var units = from Unit u in Enum.GetValues(typeof(Unit))
+                select new { ID = (int)u, Name = u.ToString() };
+            
+            ViewData["Unit"] = new SelectList(units, "ID", "Name", product.Unit);
+
             return View(product);
         }
 
-        // POST: Products/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //POST: Products/Edit/5
+        //To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Barcode,ProductName")] Product product)
-        //{
-        //if (id != product.ProductId)
-        //{
-        //    return NotFound();
-        //}
-
-        //if (ModelState.IsValid)
-        //{
-        //    try
-        //    {
-        //        _context.Update(product);
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!ProductExists(product.ProductId))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-        //    return RedirectToAction(nameof(Index));
-        //}
-        //return View(product);
-
-        //}
-
-        [HttpPost, ActionName("Edit")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(int? id)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Barcode,ProductName,ImageUrl,Qauntity,Unit")] Product product)
         {
-            if (id == null)
+            if (id != product.ProductId)
             {
                 return NotFound();
             }
-            var productToUpdate = await _context.Product.SingleOrDefaultAsync(s => s.ProductId == id);
-            if (await TryUpdateModelAsync<Product>(
-                productToUpdate,
-                "",
-                s => s.Barcode, s => s.ProductName))
+
+            if (ModelState.IsValid)
             {
                 try
                 {
+                    _context.Update(product);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateException /* ex */)
+                catch (DbUpdateConcurrencyException)
                 {
-                    //Log the error (uncomment ex variable name and write a log.)
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                                                 "Try again, and if the problem persists, " +
-                                                 "see your system administrator.");
+                    if (!ProductExists(product.ProductId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-            return View(productToUpdate);
+            return View(product);
+
         }
+
+        //[HttpPost, ActionName("Edit")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> EditPost(int? id, [Bind("ProductId,Barcode,ProductName,ImageUrl,Qauntity,Unit")] Product product)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var productToUpdate = await _context.Product.SingleOrDefaultAsync(s => s.ProductId == id);
+        //    if (await TryUpdateModelAsync<Product>(
+        //        productToUpdate,
+        //        "",
+        //        s => s.Barcode, s => s.ProductName))
+        //    {
+        //        try
+        //        {
+        //            await _context.SaveChangesAsync();
+        //            return RedirectToAction(nameof(Index));
+        //        }
+        //        catch (DbUpdateException /* ex */)
+        //        {
+        //            //Log the error (uncomment ex variable name and write a log.)
+        //            ModelState.AddModelError("", "Unable to save changes. " +
+        //                                         "Try again, and if the problem persists, " +
+        //                                         "see your system administrator.");
+        //        }
+        //    }
+        //    return View(productToUpdate);
+        //}
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
