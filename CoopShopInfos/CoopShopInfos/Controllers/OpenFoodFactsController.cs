@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CoopShopInfos.Controllers
 {
@@ -25,20 +26,36 @@ namespace CoopShopInfos.Controllers
             // Search if the product that was scanned already is in Product table
             var product = _context.Product.FirstOrDefault(e => e.Barcode == barcode);
 
-            // Getting data from Shop table using Ef Core and inserting Select item into shopList
+            // Get data from Shop table using Ef Core and inserting Select item into shopList
             var shopList = (from shop in _context.Shop select shop).ToList();
 
-            // If the product is already registred
+            // Get units list
+            var units = from Unit u in Enum.GetValues(typeof(Unit))
+                select new { ID = (int)u, Name = u.ToString() };
+
+            ViewData["Unit"] = new SelectList(units, "ID", "Name");
+
+            // If the product is already registred in database, show data
             if (product != null)
             {
                 var productSheetVM = new ProductSheetViewModel
                 {
                     ProductName = product.ProductName,
                     BarCode = product.Barcode,
+                    Quantity = product.Quantity,
+                    
+                    Unit = product.Unit,
                     ShopList = shopList,
                     SelectedAnswer = string.Empty
 
                 };
+
+                //Get category
+                    var productCategoryId = _context.CategoryProduct
+                        ?.FirstOrDefault(p => p.ProductId == product.ProductId)?.CategoryId;
+                    var category = _context.Category.FirstOrDefault(cat => cat.CategoryId == productCategoryId);
+                    productSheetVM.Categories = category?.CategoryName;
+
                 return View(productSheetVM);
             }
 
@@ -61,6 +78,8 @@ namespace CoopShopInfos.Controllers
                 // Getting data from Shop table using Ef Core and inserting Select item into shopList
                 shopList = (from shop in _context.Shop select shop).ToList();
 
+
+
                 // If the product is found in OpenFoodFacts, show data
                 switch (data.status)
                 {
@@ -68,11 +87,11 @@ namespace CoopShopInfos.Controllers
                     {
                         var productSheetVM = new ProductSheetViewModel
                         {
-                            ProductName = data?.product?.product_name_fr,
-                            ImageUrl = data?.product?.image_url,
-                            BarCode = data?.product?.code,
-                            Brand = data?.product?.brands,
-                            Categories = data?.product?.categories,
+                            ProductName = data.product?.product_name_fr,
+                            ImageUrl = data.product?.image_url,
+                            BarCode = data.product?.code,
+                            
+                            Categories = data.product?.categories,
                             ShopList = shopList,
                             SelectedAnswer = string.Empty
 
@@ -81,6 +100,7 @@ namespace CoopShopInfos.Controllers
                     }
                     case 0:
                     {
+                            // if the product is not found at all, show the form to create a new one
                         var productSheetVM = new ProductSheetViewModel
                         {
                             BarCode = barcode,
@@ -91,17 +111,19 @@ namespace CoopShopInfos.Controllers
                         return View(productSheetVM);
                     }
                 }
+                
 
             }
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveProduct(int productid, string barcode, string productname, decimal price, float quantity, string imageurl,
-            int shopid)
+        public async Task<IActionResult> SaveProduct(int productid, string barcode, string productname, decimal price, float quantity, string imageurl, Unit unit, string categories,
+            int shopId, string shopName)
         {
             var product = _context.Product.FirstOrDefault(e => e.Barcode == barcode);
 
+            // if the product doesn't already exist, create it
             if (product == null)
             {
                 product = new Models.Product
@@ -109,106 +131,148 @@ namespace CoopShopInfos.Controllers
                     Barcode = barcode,
                     ProductName = productname,
                     Quantity = quantity,
-                    ImageUrl = imageurl
+                    ImageUrl = imageurl,
+                    Unit = unit
                 };
+                _context.Add(product);
 
-                try
-                {
-                    _context.Add(product);
-                    await _context.SaveChangesAsync();
-                }
-                catch (Exception /* dex */)
-                {
-                    //Log the error (uncomment dex variable name and add a line here to write a log.)
-                    ModelState.AddModelError("",
-                        "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                }
+                // Add or update the category if there is one
+                AddOrUpdatecategory(categories, product);
 
+                // Save DataContext
+                await SaveContext();
+
+                //Add or update the price
+                AddOrUpdatePrice(product, shopId, price);
+
+                // Save Data Context
+                await SaveContext();
+                
             }
+            //else update it
             else
             {
-                _context.Update(product);
-                try
-                {
-                    await _context.SaveChangesAsync();
+                // Update product table
+               _context.Update(product);
+         
+                // Add or update the category if there is one
+                AddOrUpdatecategory(categories, product);
 
-                }
-                catch (Exception /* ex */)
-                {
-                    //Log the error (uncomment ex variable name and write a log.)
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                                                 "Try again, and if the problem persists, " +
-                                                 "see your system administrator.");
-                }
-                //todo: cas du prix qui existe éventuellement
-                // si existe ->update puis return
-                var priceToUpdate =
-                    _context.ShopProduct.Find(shopid, product.ProductId);
+                // Save Data Context
+                await SaveContext();
 
-                if (priceToUpdate != null)
-                {
-                    //priceToUpdate.Price = price;
-                    //_context.Update(priceToUpdate);
-                    try
-                    {
-                        await _context.SaveChangesAsync();
+                //Add or update the price
+                AddOrUpdatePrice(product, shopId, price);
 
-                    }
-                    catch (Exception /* ex */)
-                    {
-                        //Log the error (uncomment ex variable name and write a log.)
-                        ModelState.AddModelError("", "Unable to save changes. " +
-                                                     "Try again, and if the problem persists, " +
-                                                     "see your system administrator.");
-                    }
+                // Save Data Context
+                await SaveContext();
 
-                    
-                    return RedirectToAction("Index", "BarcodeScan");
-                }
+                // Return to Index page
+                return RedirectToAction("Index", "BarcodeScan");
+                
             }
-            //todo
-            //nouveau prix qui n'existe pas
-
-            var shopProduct = new ShopProduct
-            {
-                ShopId = shopid,
-                ProductId = product.ProductId,
-                //Price = price
-            };
-
-            _context.Add(shopProduct);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception /* ex */)
-            {
-
-                //Log the error (uncomment ex variable name and write a log.)
-                ModelState.AddModelError("", "Unable to save changes. " +
-                                                "Try again, and if the problem persists, " +
-                                                "see your system administrator.");
-            }
-
+            
             return RedirectToAction("Index", "BarcodeScan");
         }
 
 
-        //private bool ProductExists(string barcode)
-        //{
-        //    return _context.Product.Any(e => e.Barcode == barcode);
-        //}
+        private void AddOrUpdatecategory(string categories, Models.Product product)
+        {
+            if (categories != null)
+            {
+                // Try to find it in the Category table
+                var categoryToFind = _context.Category.FirstOrDefault(c => c.CategoryName == categories);
 
-        //private void SavePrice(decimal price, Models.Product product)
-        //{
-        //    var result = _context.Product.Where(p => p.ProductId == product.ProductId).Single().ShopProduct;
+                // Category doesn't exist yet, add it to Category table
+                if (categoryToFind == null)
+                {
+                    var category = new Category
+                    {
+                        CategoryName = categories,
 
-        //    var shopProduct = new ShopProduct
-        //    {
-        //        Price = price
-        //    };
-        //    _context.ShopProduct.Add(shopProduct);
-        //}
+                    };
+                    _context.Add(category);
+
+                    categoryToFind = category;
+                }
+
+                
+                // Create new CategoryProduct object if it not already exists
+                var categoryProductToFind = _context.CategoryProduct.Find(categoryToFind.CategoryId,product.ProductId);
+
+                if (categoryProductToFind == null)
+                {
+                    var categoryProduct = new CategoryProduct
+                    {
+                        ProductId = product.ProductId,
+                        Product = product,
+                        CategoryId = categoryToFind.CategoryId,
+                        Category = categoryToFind
+
+                    };
+                    
+                    // Add new Categoryproduct object to Data Context
+                    _context.Add(categoryProduct);
+                }
+
+            }
+        }
+
+        private void AddOrUpdatePrice(Models.Product product, int shopId, decimal priceAmount)
+        {
+            // Find Shop
+            var shopToFind = _context.Shop.FirstOrDefault(s => s.ShopId == shopId);
+            // Find price 
+            var priceToFind = _context.Price.FirstOrDefault(p => p.PriceAmount == priceAmount);
+            // If price doesn't already exist, create new price with the given price amount
+            if (priceToFind == null)
+            {
+                var price = new Price
+                {
+                    PriceAmount = priceAmount
+                };
+                _context.Add(price);
+                priceToFind = price;
+            }
+
+            //Create new ShopProduct object if it not already exists, then update DateTime
+            var shopProductToFind = _context.ShopProduct.Find(shopToFind.ShopId,product.ProductId, priceToFind.PriceId);
+
+            if (shopProductToFind == null)
+            {
+                var shopProduct = new ShopProduct
+                {
+                    PriceId = priceToFind.PriceId,
+                    Price = priceToFind,
+                    ProductId = product.ProductId,
+                    Product = product,
+                    ShopId = shopToFind.ShopId,
+                    Shop = shopToFind
+                    
+                };
+                shopProductToFind = shopProduct;
+            }
+
+            // Add new ShopProduct object to DataContext
+            shopProductToFind.PriceDateTime = DateTime.Now;
+            _context.Add(shopProductToFind);
+        }
+
+        private async Task SaveContext()
+        {
+            try
+            {
+                await _context.SaveChangesAsync();
+
+            }
+            catch (Exception /* ex */)
+            {
+                //Log the error (uncomment ex variable name and write a log.)
+                ModelState.AddModelError("", "Unable to save changes. " +
+                                             "Try again, and if the problem persists, " +
+                                             "see your system administrator.");
+            }
+        }
     }
 
 }

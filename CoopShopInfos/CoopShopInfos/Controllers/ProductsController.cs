@@ -54,7 +54,7 @@ namespace CoopShopInfos.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProductId,Barcode,ProductName,ImageUrl,Qauntity,Unit")] Product product)
+        public async Task<IActionResult> Create([Bind("ProductId,Barcode,ProductName,ImageUrl,Quantity,Unit")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace CoopShopInfos.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Barcode,ProductName,ImageUrl,Qauntity,Unit")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Barcode,ProductName,ImageUrl,Quantity,Unit")] Product product)
         {
             if (id != product.ProductId)
             {

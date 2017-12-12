@@ -49,9 +49,9 @@
                         <input asp-for="ProductName" class="form-control" name="productname"/>
                         <span asp-validation-for="ProductName" class="text-danger"></span>
 
-                        <label asp-for="Brand" class="control-label"></label>
-                        <input asp-for="Brand" class="form-control" name="brand" />
-                        <span asp-validation-for="Brand" class="text-danger"></span>
+                        <label asp-for="CategoryId" class="control-label"></label>
+                        <input asp-for="CategoryId" class="form-control" name="brand" />
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
                     
                         <label asp-for="Categories" class="control-label"></label>
                         <input asp-for="Categories" class="form-control" name="categories" />
@@ -60,11 +60,14 @@
                         <label asp-for="ImageUrl" class="control-label"></label>
                         <input asp-for="ImageUrl" class="form-control" name="imageurl" />
                         <span asp-validation-for="ImageUrl" class="text-danger" type="hidden"></span>
+                    
+                        <label asp-for="Quantity" class="control-label"></label>
+                        <input asp-for="Quantity" class="form-control" name="imageurl" />
+                        <span asp-validation-for="Quantity" class="text-danger" type="hidden"></span>
+                    
+                        <label asp-for="Unit" class="control-label"></label>
+                        <select asp-for="Unit" class ="form-control" asp-items="ViewBag.Unit"></select>
 
-                        <div>
-                            Catégories :
-                            @Html.DisplayFor(model => model.Categories)
-                        </div>
                         <div class="checkbox">
                             @{
                                 for (var j = 0; j < Model.ShopList.Count(); j++)

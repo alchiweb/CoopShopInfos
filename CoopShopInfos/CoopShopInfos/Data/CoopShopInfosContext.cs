@@ -17,11 +17,17 @@ namespace CoopShopInfos.Models
         public DbSet<Product> Product { get; set; }
         public DbSet<Shop> Shop { get; set; }
         public DbSet<ShopProduct> ShopProduct { get; set; }
+        public DbSet<CategoryProduct> CategoryProduct { get; set; }
+        public DbSet<CoopShopInfos.Models.Category> Category { get; set; }
+        public DbSet<CoopShopInfos.Models.Price> Price { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ShopProduct>()
-                .HasKey(sp => new { sp.ShopId, sp.ProductId });
+                .HasKey(sp => new { sp.ShopId, sp.ProductId, sp.PriceId });
+
+            modelBuilder.Entity<CategoryProduct>()
+                .HasKey(cp => new { cp.CategoryId, cp.ProductId });
 
             //modelBuilder.Entity<ShopProduct>()
             //    .HasOne(sp => sp.Product)
@@ -34,9 +40,7 @@ namespace CoopShopInfos.Models
             //    .HasForeignKey(sp => sp.ShopId);
         }
 
-        public DbSet<CoopShopInfos.Models.Category> Category { get; set; }
-
-        public DbSet<CoopShopInfos.Models.Price> Price { get; set; }
+        
 
     }
 }

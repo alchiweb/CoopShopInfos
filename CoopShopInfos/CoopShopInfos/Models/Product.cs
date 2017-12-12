@@ -13,6 +13,7 @@ namespace CoopShopInfos.Models
         public string ImageUrl { get; set; }
         public float Quantity { get; set; }     
         public Unit Unit { get; set; }
-        public ICollection<ShopProduct> ShopProduct { get; set; }
+        public ICollection<CategoryProduct> CategoryProduct { get; set; }    = new List<CategoryProduct>();   
+        public ICollection<ShopProduct> ShopProduct { get; set; }    = new List<ShopProduct>();
     }
 }

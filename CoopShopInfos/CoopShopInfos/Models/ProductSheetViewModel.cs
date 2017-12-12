@@ -13,8 +13,7 @@ namespace CoopShopInfos.Models
         public string ImageUrl { get; set; }
         [DisplayName("Code barre")]
         public string BarCode { get; set; }
-        [DisplayName("Marque")]
-        public string Brand { get; set; }
+        public string CategoryId { get; set; }
         [DisplayName("Catégories")]
         public string Categories { get; set; }
         [DisplayName("Quantité")]
@@ -24,6 +23,6 @@ namespace CoopShopInfos.Models
         [DisplayName("Prix")]
         public decimal Price { get; set; }
         public string SelectedAnswer { get; set; }
-        public List<Shop> ShopList { get; set; }
+        public IList<Shop> ShopList { get; set; }
     }
 }
