@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
@@ -24,5 +25,7 @@ namespace CoopShopInfos.Models
         public decimal Price { get; set; }
         public string SelectedAnswer { get; set; }
         public IList<Shop> ShopList { get; set; }
+        public ICollection<Price> Prices { get; set; }
+        
     }
 }

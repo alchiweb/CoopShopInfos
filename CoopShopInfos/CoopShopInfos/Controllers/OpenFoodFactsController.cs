@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoopShopInfos.Controllers
 {
@@ -27,8 +28,12 @@ namespace CoopShopInfos.Controllers
             var product = _context.Product.FirstOrDefault(e => e.Barcode == barcode);
 
             // Get data from Shop table using Ef Core and inserting Select item into shopList
-            var shopList = (from shop in _context.Shop select shop).ToList();
+            var shopList = _context.Shop.ToList();
 
+            // Get prices
+            var prices = _context.Price.Include("ShopProduct").Select(p => p.ShopProduct.FirstOrDefault(prod => prod.ProductId == product.ProductId).Price).ToList();
+            prices.RemoveAll(item => item == null);
+            
             // Get units list
             var units = from Unit u in Enum.GetValues(typeof(Unit))
                 select new { ID = (int)u, Name = u.ToString() };
@@ -43,10 +48,11 @@ namespace CoopShopInfos.Controllers
                     ProductName = product.ProductName,
                     BarCode = product.Barcode,
                     Quantity = product.Quantity,
-                    
+                    ImageUrl = product.ImageUrl,
                     Unit = product.Unit,
                     ShopList = shopList,
-                    SelectedAnswer = string.Empty
+                    SelectedAnswer = string.Empty,
+                    Prices = prices
 
                 };
 
@@ -135,6 +141,8 @@ namespace CoopShopInfos.Controllers
                     Unit = unit
                 };
                 _context.Add(product);
+                // Save DataContext
+                await SaveContext();
 
                 // Add or update the category if there is one
                 AddOrUpdatecategory(categories, product);
@@ -143,7 +151,7 @@ namespace CoopShopInfos.Controllers
                 await SaveContext();
 
                 //Add or update the price
-                AddOrUpdatePrice(product, shopId, price);
+                AddPrice(product, shopId, price);
 
                 // Save Data Context
                 await SaveContext();
@@ -152,9 +160,17 @@ namespace CoopShopInfos.Controllers
             //else update it
             else
             {
-                // Update product table
-               _context.Update(product);
-         
+                // Update product 
+                product.ProductName = productname;
+                product.Quantity = quantity;
+                product.ImageUrl = imageurl;
+                product.Unit = unit;
+                _context.Update(product);
+              
+
+                // Save Data Context
+                _context.SaveChanges();
+
                 // Add or update the category if there is one
                 AddOrUpdatecategory(categories, product);
 
@@ -162,7 +178,7 @@ namespace CoopShopInfos.Controllers
                 await SaveContext();
 
                 //Add or update the price
-                AddOrUpdatePrice(product, shopId, price);
+                AddPrice(product, shopId, price);
 
                 // Save Data Context
                 await SaveContext();
@@ -218,32 +234,28 @@ namespace CoopShopInfos.Controllers
             }
         }
 
-        private void AddOrUpdatePrice(Models.Product product, int shopId, decimal priceAmount)
+        private void AddPrice(Models.Product product, int shopId, decimal priceAmount)
         {
             // Find Shop
             var shopToFind = _context.Shop.FirstOrDefault(s => s.ShopId == shopId);
-            // Find price 
-            var priceToFind = _context.Price.FirstOrDefault(p => p.PriceAmount == priceAmount);
-            // If price doesn't already exist, create new price with the given price amount
-            if (priceToFind == null)
+            
+            // Create new price
+            var price = new Price
             {
-                var price = new Price
-                {
-                    PriceAmount = priceAmount
-                };
-                _context.Add(price);
-                priceToFind = price;
-            }
-
+                PriceAmount = priceAmount,
+                PriceDateTime = DateTime.Now
+            };
+            _context.Add(price);
+  
             //Create new ShopProduct object if it not already exists, then update DateTime
-            var shopProductToFind = _context.ShopProduct.Find(shopToFind.ShopId,product.ProductId, priceToFind.PriceId);
+            var shopProductToFind = _context.ShopProduct.Find(shopToFind.ShopId,product.ProductId, price.PriceId);
 
             if (shopProductToFind == null)
             {
                 var shopProduct = new ShopProduct
                 {
-                    PriceId = priceToFind.PriceId,
-                    Price = priceToFind,
+                    PriceId = price.PriceId,
+                    Price = price,
                     ProductId = product.ProductId,
                     Product = product,
                     ShopId = shopToFind.ShopId,
@@ -254,7 +266,6 @@ namespace CoopShopInfos.Controllers
             }
 
             // Add new ShopProduct object to DataContext
-            shopProductToFind.PriceDateTime = DateTime.Now;
             _context.Add(shopProductToFind);
         }
 

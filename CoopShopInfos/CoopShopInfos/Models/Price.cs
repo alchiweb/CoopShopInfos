@@ -9,6 +9,7 @@ namespace CoopShopInfos.Models
     {
         public int PriceId { get; set; }
         public decimal PriceAmount { get; set; }
+        public DateTime PriceDateTime { get; set; }
         public ICollection<ShopProduct> ShopProduct { get; set; }
     }
 }
