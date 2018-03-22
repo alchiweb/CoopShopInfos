@@ -30,9 +30,7 @@ namespace CoopShopInfos.Controllers
             // Get data from Shop table using Ef Core and inserting Select item into shopList
             var shopList = _context.Shop.ToList();
 
-            // Get prices
-            var prices = _context.Price.Include("ShopProduct").Select(p => p.ShopProduct.FirstOrDefault(prod => prod.ProductId == product.ProductId).Price).ToList();
-            prices.RemoveAll(item => item == null);
+            
             
             // Get units list
             var units = from Unit u in Enum.GetValues(typeof(Unit))
@@ -52,7 +50,7 @@ namespace CoopShopInfos.Controllers
                     Unit = product.Unit,
                     ShopList = shopList,
                     SelectedAnswer = string.Empty,
-                    Prices = prices
+                    //Prices = prices
 
                 };
 
@@ -191,7 +189,7 @@ namespace CoopShopInfos.Controllers
             return RedirectToAction("Index", "BarcodeScan");
         }
 
-
+        
         private void AddOrUpdatecategory(string categories, Models.Product product)
         {
             if (categories != null)

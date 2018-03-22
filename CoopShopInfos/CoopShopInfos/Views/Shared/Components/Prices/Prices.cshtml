@@ -1,0 +1,34 @@
+﻿
+@{
+    ViewData["Title"] = "ShowPrices";
+}
+@model PricesViewModel
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Prix
+            </th>
+            <th>
+                Date
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Prices)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceAmount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PriceDateTime)
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

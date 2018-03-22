@@ -25,7 +25,7 @@ namespace CoopShopInfos.Models
         public decimal Price { get; set; }
         public string SelectedAnswer { get; set; }
         public IList<Shop> ShopList { get; set; }
-        public ICollection<Price> Prices { get; set; }
+        
         
     }
 }
