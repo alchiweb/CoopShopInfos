@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace CoopShopInfos.Models
 {
     public class ProductSheetViewModel
-    {
+    {   
+        [JsonIgnore]
         public int ProductId { get; set; }
         [DisplayName("Nom du produit"), Required]
         public string ProductName { get; set; }
@@ -23,9 +25,10 @@ namespace CoopShopInfos.Models
         public Unit Unit { get; set; }
         [DisplayName("Prix")]
         public decimal Price { get; set; }
+        [JsonIgnore]
         public string SelectedAnswer { get; set; }
+
         public IList<Shop> ShopList { get; set; }
-        
-        
+        public IList<PricesViewModel> ShopPricesList { get; set; }       
     }
 }

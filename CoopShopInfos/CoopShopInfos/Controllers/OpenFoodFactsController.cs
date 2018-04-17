@@ -60,6 +60,8 @@ namespace CoopShopInfos.Controllers
                     var category = _context.Category.FirstOrDefault(cat => cat.CategoryId == productCategoryId);
                     productSheetVM.Categories = category?.CategoryName;
 
+                string json = JsonConvert.SerializeObject(productSheetVM);
+
                 return View(productSheetVM);
             }
 
@@ -182,11 +184,11 @@ namespace CoopShopInfos.Controllers
                 await SaveContext();
 
                 // Return to Index page
-                return RedirectToAction("Index", "BarcodeScan");
+                return RedirectToAction("Index", "Home");
                 
             }
             
-            return RedirectToAction("Index", "BarcodeScan");
+            return RedirectToAction("Index", "Home");
         }
 
         

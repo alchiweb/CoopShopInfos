@@ -1,4 +1,4 @@
-﻿
+﻿@using System
 @{
     ViewData["Title"] = "ShowPrices";
 }
@@ -19,16 +19,30 @@
     </thead>
     <tbody>
         @foreach (var item in Model.Prices)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PriceAmount)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PriceDateTime)
-                </td>
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PriceDateTime)
+            </td>
 
-            </tr>
-        }
+        
+            <ej-date-picker id="@item.PriceId" value="@DateTime.Today"></ej-date-picker>
+            <ej-chart id="@item.PriceId">
+                <e-chart-series>
+                    <e-series datasource="ViewBag.chartData" x-name="Month" y-name="Sales" type="Line">
+                        
+
+                    </e-series>
+                </e-chart-series>
+                <e-size height="400" width="600"></e-size>
+            </ej-chart>
+        </tr>
+}
+
+
     </tbody>
 </table>
+

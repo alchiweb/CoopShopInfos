@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CoopShopInfos.Models;
+using Newtonsoft.Json;
 
 namespace CoopShopInfos.Controllers.API
 {
@@ -14,6 +15,8 @@ namespace CoopShopInfos.Controllers.API
     public class ProductsController : Controller
     {
         private readonly CoopShopInfosContext _context;
+
+        
 
         public ProductsController(CoopShopInfosContext context)
         {
@@ -25,6 +28,132 @@ namespace CoopShopInfos.Controllers.API
         public IEnumerable<Product> GetProduct()
         {
             return _context.Product;
+        }
+
+        // GET: api/Products/ProductSheet/5
+        [HttpGet("ProductSheet/{id}")]
+        public async Task<IActionResult> GetProductSheet([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var product = await _context.Product.SingleOrDefaultAsync(m => m.ProductId == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // Get data from Shop table using Ef Core and inserting Select item into shopList
+            var shopList = _context.Shop.ToList();
+
+            IList<PricesViewModel> pricesList = new List<PricesViewModel>();
+
+            // Get prices for every shop
+            foreach (var shop in shopList)
+            {
+                var prices = _context.Price
+                    .Include(sp => sp.ShopProduct)
+                    .Where(s => s.ShopProduct.All(sid => sid.ShopId == shop.ShopId))
+                    .Select(p => p.ShopProduct.FirstOrDefault(prod => prod.ProductId == product.ProductId).Price)
+                    .OrderByDescending(d => d.PriceDateTime)
+                    .ToList();
+
+                prices?.RemoveAll(item => item == null);
+
+                var pricesViewModel = new PricesViewModel
+                {
+                    ShopName = shop.ShopName,
+                    Prices = prices
+                };
+
+                pricesList.Add(pricesViewModel);
+            }
+
+            var productSheetVM = new ProductSheetViewModel
+            {
+                ProductName = product.ProductName,
+                BarCode = product.Barcode,
+                Quantity = product.Quantity,
+                ImageUrl = product.ImageUrl,
+                Unit = product.Unit,
+                ShopPricesList = pricesList
+            };
+
+            //Get category
+            var productCategoryId = _context.CategoryProduct
+                ?.FirstOrDefault(p => p.ProductId == product.ProductId)?.CategoryId;
+            var category = _context.Category.FirstOrDefault(cat => cat.CategoryId == productCategoryId);
+            productSheetVM.Categories = category?.CategoryName;
+
+            //var json = JsonConvert.SerializeObject(productSheetVM);
+
+            return Ok(productSheetVM);
+        }
+
+        // GET: api/Products/ProductSheets
+        [HttpGet("ProductSheets")]
+        public async Task<IActionResult> GetProductSheets()
+        {
+            var productList = _context.Product.ToList();
+
+            var productSheetList = new List<ProductSheetViewModel>();
+
+            // Get data from Shop table using Ef Core and inserting Select item into shopList
+            var shopList = _context.Shop.ToList();
+
+            foreach (var product in productList)
+            {
+               
+                IList<PricesViewModel> pricesList = new List<PricesViewModel>();
+
+                // Get prices for every shop
+                foreach (var shop in shopList)
+                {
+                    var prices = _context.Price
+                        .Include(sp => sp.ShopProduct)
+                        .Where(s => s.ShopProduct.All(sid => sid.ShopId == shop.ShopId))
+                        .Select(p => p.ShopProduct.FirstOrDefault(prod => prod.ProductId == product.ProductId).Price)
+                        .OrderByDescending(d => d.PriceDateTime)
+                        .ToList();
+
+                    prices?.RemoveAll(item => item == null);
+
+                    var pricesViewModel = new PricesViewModel
+                    {
+                        ShopName = shop.ShopName,
+                        Prices = prices
+                    };
+
+                    pricesList.Add(pricesViewModel);
+                }
+
+                var productSheetVM = new ProductSheetViewModel
+                {
+                    ProductName = product.ProductName,
+                    BarCode = product.Barcode,
+                    Quantity = product.Quantity,
+                    ImageUrl = product.ImageUrl,
+                    Unit = product.Unit,
+                    ShopPricesList = pricesList
+                };
+
+                productSheetList.Add(productSheetVM);
+
+                //Get category
+                var productCategoryId = _context.CategoryProduct
+                    ?.FirstOrDefault(p => p.ProductId == product.ProductId)?.CategoryId;
+                var category = _context.Category.FirstOrDefault(cat => cat.CategoryId == productCategoryId);
+                productSheetVM.Categories = category?.CategoryName;
+
+
+            }
+
+           
+
+            return Ok(productSheetList);
         }
 
         // GET: api/Products/5

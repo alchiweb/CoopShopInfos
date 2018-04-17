@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CoopShopInfos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Syncfusion.Linq;
 
 namespace CoopShopInfos.ViewComponents
@@ -37,13 +38,34 @@ namespace CoopShopInfos.ViewComponents
                 
                 prices?.RemoveAll(item => item == null);
 
+               
+
+                
+
                 if (prices != null)
                 {
+                    var chartData = new List<ChartData>();
+
+                    foreach (var price in prices)
+                    {
+                        var point = new ChartData
+                        {
+                            Pricedate = price.PriceDateTime,
+                            PriceAmount = (double)price.PriceAmount
+                        };
+                        chartData.Add(point);
+                    }
+
+                    ViewBag.PricesListByShop = chartData;
+
                     var pricesVM = new PricesViewModel
                     {
                         ShopId = shopid,
                         Prices = prices
                     };
+
+                   
+
                     return View("Prices", pricesVM); 
                 }
                 else
@@ -56,5 +78,11 @@ namespace CoopShopInfos.ViewComponents
                 return View("Default");
             }
         }
+    }
+
+    public class ChartData
+    {
+        public DateTime Pricedate { get; set; }
+        public double PriceAmount { get; set; }
     }
 }

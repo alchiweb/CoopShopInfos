@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using CoopShopInfos.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 
 namespace CoopShopInfos.Controllers
 {
@@ -13,6 +15,29 @@ namespace CoopShopInfos.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Index(Product model, IFormFile fichier, string codeBarre)
+        {
+            
+            if (codeBarre != null)
+            {
+                var values = new RouteValueDictionary
+                {
+                    
+                    { "barcode", codeBarre }
+                };
+
+                //return Content($"{model.Barcode}");
+                return RedirectToAction("ShowProduct", "OpenFoodFacts", values);
+            }
+            else
+            {
+                {
+                    return View("DecodingError");
+                }
+            }
         }
 
         public IActionResult About()
