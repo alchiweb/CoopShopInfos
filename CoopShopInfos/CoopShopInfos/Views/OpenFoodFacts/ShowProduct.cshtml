@@ -23,112 +23,133 @@
 
 </head>
 <body>
-    <div style="padding: 20px">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>
-                    @Html.DisplayFor(model => model.ProductName)
-                </h2>
-            </div><!--/.col-md-6 -->
-        </div><!--row -->
-        <div>
-            <form asp-action="SaveProduct">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation" style="">
+                <span class="navbar-toggler-icon"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoopShopInfos</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Shops">Magasins</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Categories">Catégories</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div style="padding: 20px">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>
+                @Html.DisplayFor(model => model.ProductName)
+            </h2>
+        </div><!--/.col-md-6 -->
+    </div><!--row -->
+    <div>
+        <form asp-action="SaveProduct">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="jumbotron">
+                        <img id="productImage" src="@imagePath" width="200" heigth="200" alt="Product Image"/>
+                    </div>
+                </div><!--/.col-md-6 -->
+                <div class="col-md-6">
+                    <div class="form-group">
+
+                        <label asp-for="BarCode" class="control-label"></label>
+                        <input asp-for="BarCode" class="form-control" name="barcode"/>
+                        <span asp-validation-for="BarCode" class="text-danger"></span>
+
+                        <label asp-for="ProductName" class="control-label"></label>
+                        <input asp-for="ProductName" class="form-control" name="productname"/>
+                        <span asp-validation-for="ProductName" class="text-danger"></span>
+
+                        <label asp-for="Categories" class="control-label"></label>
+                        <input asp-for="Categories" class="form-control" name="categories"/>
+                        <span asp-validation-for="Categories" class="text-danger"></span>
+
+                        <input asp-for="ImageUrl" class="form-control" name="imageurl" type="hidden"/>
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+
+                        <label asp-for="Quantity" class="control-label"></label>
+                        <input asp-for="Quantity" class="form-control" name="quantity"/>
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+
+                        <label asp-for="Unit" class="control-label"></label>
+                        <select asp-for="Unit" class="form-control" asp-items="ViewBag.Unit"></select>
+
+
+
+
+
+
+                    </div><!--form group -->
+                    <input onclick="history.go(-1)" value="Retour" class="btn btn-primary"/>
+                </div><!--col-md6-->
+
+            </div><!--row-->
+
+
+
+            <div class="form-group">
+                <input asp-for="BarCode" class="form-control" name="barcode" type="hidden"/>
+                <span asp-validation-for="BarCode" class="text-danger"></span>
+
+                <h3>Entrez un prix :</h3>
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" name="price" required/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+
+                <div>
+                    <h3>Choisissez un magasin :</h3>
+                    @{
+                        for (var j = 0; j < Model.ShopList.Count(); j++)
+                        {
+                            //@Html.RadioButton("shopid", Model.ShopList[j].ShopId, new { id = "rbShopId_" + Model.ShopList[j].ShopId })
+                            //;
+                            //@Html.Label("lblShopId_" + Model.ShopList[j].ShopId, Model.ShopList[j].ShopName, new { @for = "rbShopId_" + Model.ShopList[j].ShopId })
+                            //;
+                            <input asp-for="SelectedAnswer" name="shopid" value="@Model.ShopList[j].ShopId" type="radio">
+                            <label asp-for="@Model.ShopList[j].ShopId" style="padding-right: 20px; font-size: 16px; color: orangered">@Model.ShopList[j].ShopName</label>
+                            <input asp-for="@Model.ShopList[j].ShopId" type="hidden"/>
+
+                            @await Component.InvokeAsync("Prices", new {barcode = Model.BarCode, shopid = Model.ShopList[j].ShopId})
+
+                        }
+                    }
+                </div>
+
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="jumbotron">
-                            <img id="productImage" src="@imagePath" width="200" heigth="200" alt="Product Image" />
-                        </div>
-                    </div><!--/.col-md-6 -->
-                    <div class="col-md-6">
                         <div class="form-group">
+                            <input type="submit" value="Enregistrer" class="btn btn-danger"/>
+                        </div>
+                    </div><!--col-md-6 -->
+                </div><!--row -->
+            </div>
+        </form>
 
-                            <label asp-for="BarCode" class="control-label"></label>
-                            <input asp-for="BarCode" class="form-control" name="barcode" />
-                            <span asp-validation-for="BarCode" class="text-danger"></span>
-
-                            <label asp-for="ProductName" class="control-label"></label>
-                            <input asp-for="ProductName" class="form-control" name="productname" />
-                            <span asp-validation-for="ProductName" class="text-danger"></span>
-
-                            <label asp-for="Categories" class="control-label"></label>
-                            <input asp-for="Categories" class="form-control" name="categories" />
-                            <span asp-validation-for="Categories" class="text-danger"></span>
-
-                            <input asp-for="ImageUrl" class="form-control" name="imageurl" type="hidden" />
-                            <span asp-validation-for="ImageUrl" class="text-danger"></span>
-
-                            <label asp-for="Quantity" class="control-label"></label>
-                            <input asp-for="Quantity" class="form-control" name="quantity" />
-                            <span asp-validation-for="Quantity" class="text-danger"></span>
-
-                            <label asp-for="Unit" class="control-label"></label>
-                            <select asp-for="Unit" class="form-control" asp-items="ViewBag.Unit"></select>
-
-                            
-
-                            
-                           
-                        
-                        </div><!--form group -->
-                        <input onclick= "history.go(-1)" value="Retour" class="btn btn-primary"/>
-                    </div><!--col-md6-->
-
-                </div><!--row-->
-                
-
-           
-                <div class="form-group">
-                    <input asp-for="BarCode" class="form-control" name="barcode" type="hidden" />
-                    <span asp-validation-for="BarCode" class="text-danger"></span>
-                    
-                    <h3>Entrez un prix :</h3>
-                    <label asp-for="Price" class="control-label"></label>
-                    <input asp-for="Price" class="form-control" name="price" required/>
-                    <span asp-validation-for="Price" class="text-danger"></span>
-
-                    <div>
-                        <h3>Choisissez un magasin :</h3>
-                        @{
-                            for (var j = 0; j < Model.ShopList.Count(); j++)
-                            {
-                                //@Html.RadioButton("shopid", Model.ShopList[j].ShopId, new { id = "rbShopId_" + Model.ShopList[j].ShopId })
-                                //;
-                                //@Html.Label("lblShopId_" + Model.ShopList[j].ShopId, Model.ShopList[j].ShopName, new { @for = "rbShopId_" + Model.ShopList[j].ShopId })
-                                //;
-                                <input asp-for="SelectedAnswer" name="shopid" value="@Model.ShopList[j].ShopId" type="radio">
-                                <label asp-for="@Model.ShopList[j].ShopId" style="padding-right: 20px; font-size: 16px; color: orangered">@Model.ShopList[j].ShopName</label>
-                                <input asp-for="@Model.ShopList[j].ShopId" type="hidden"/>
-
-                                @await Component.InvokeAsync("Prices", new {barcode = Model.BarCode, shopid = Model.ShopList[j].ShopId})
-
-                            }
-                        }
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="submit" value="Enregistrer" class="btn btn-danger" />
-                            </div>
-                        </div><!--col-md-6 -->
-                    </div><!--row -->
-                </div>
-            </form>  
-            
-        </div><!--col-md-6 -->
-    </div><!--row -->
-    
+    </div><!--col-md-6 -->
+</div><!--row -->
 
 
-   
 
-    <script type="text/javascript">
-        jQuery(document).ready(function () {
-            $("img").on("error", (function () {
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function() {
+        $("img").on("error",
+            (function() {
                 $(this).attr("src", "\images\placeholder_kitten-700_500.jpg");
             }));
-        });
-    </script>
+    });
+</script>
 </body>
 </html>

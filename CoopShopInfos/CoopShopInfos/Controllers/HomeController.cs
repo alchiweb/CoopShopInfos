@@ -40,6 +40,16 @@ namespace CoopShopInfos.Controllers
             }
         }
 
+        public IActionResult Shops()
+        {
+            return RedirectToAction("Index", "Shops");
+        }
+
+        public IActionResult Categories()
+        {
+            return RedirectToAction("Index", "Categories");
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";

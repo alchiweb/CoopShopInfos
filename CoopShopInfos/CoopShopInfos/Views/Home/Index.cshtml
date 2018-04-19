@@ -23,32 +23,33 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-        @*<div class="navbar-header">*@
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" style="">
+        <div class="navbar-header">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation" style="">
             <span class="navbar-toggler-icon"></span>
-            @*<span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>*@
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
         </button>
         <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoopShopInfos</a>
-        @*</div>*@
-        <div class="collapse navbar-collapse">
+        </div>
+        <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
-                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Shops">Magasins</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Categories">Catégories</a></li>
             </ul>
         </div>
     </div>
 </nav>
-<div style="padding: 20px">
-<h1>Bienvenue sur CoopShopinfos, le comparateur de prix des Oies Sauvages</h1>
-<h3>Pour entrer un nouveau code-barre, deux possibilités :</h3>
+<div style="padding: 40px">
+<h2>Bienvenue sur CoopShopinfos</h2>
+<h5>Le comparateur de prix des Oies Sauvages</h5>
+<h3 style="padding-top:40px">Pour entrer un nouveau code-barre, deux possibilités :</h3>
 <ul>
     <li>Cliquer sur le bouton de gauche et utiliser la caméra</li>
     <li>Entrer les chiffres du code-barre à la main</li>
 </ul>
-<h1>Scanner un code-barre</h1>
+<h2>Scanner un code-barre</h2>
 <form asp-action="Index" method="post" id="form" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-8">
@@ -91,7 +92,15 @@
     </div><!-- /.modal -->
 
 </form>
-
+    
+@*<form asp-action="Shops">
+    <h4>Mettre à jour la liste des magasins</h4>
+    <input type="submit" class="btn btn-default" value="Magasins"/>
+</form>
+<form asp-action="Categories">
+    <h4>Mettre à jour les catégories de produits</h4>
+    <input type="submit" class="btn btn-default" value="Categories"/>
+</form>*@
 
 <style>
     #interactive.viewport {

@@ -6,7 +6,7 @@
     <title>@ViewData["Title"] - CoopShopInfos</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/cerulean/bootstrap.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/cerulean/bootstrap.min.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link href="~/lib/syncfusion-javascript/Content/ej/web/bootstrap-theme/ej.web.all.min.css" rel="stylesheet" />
 
@@ -26,26 +26,26 @@
     </environment>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            @*<div class="navbar-header">*@
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation" style="">
-                    <span class="navbar-toggler-icon"></span>
-                    @*<span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>*@
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoopShopInfos</a>
-            @*</div>*@
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav mr-auto">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-            </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation" style="">
+                <span class="navbar-toggler-icon"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoopShopInfos</a>
         </div>
-    </nav>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Shops">Magasins</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Categories">Catégories</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
     <div class="container body-content">
         @RenderBody()
         <hr />

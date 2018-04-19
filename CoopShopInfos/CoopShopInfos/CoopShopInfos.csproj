@@ -26,10 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\Components\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Update="Views\Shared\Components\Prices\Prices.cshtml">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
