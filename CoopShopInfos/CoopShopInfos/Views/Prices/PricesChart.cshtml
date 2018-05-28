@@ -1,0 +1,42 @@
+﻿@using System
+
+@{
+    ViewData["Title"] = "PricesChart";
+}
+
+<h2>PricesChart</h2>
+<ej-date-picker id="Date" value="@DateTime.Today"></ej-date-picker>
+<div id="container" style="width:820px; height:500px;">
+    <ej-chart id="PricesChart" style="width: 820px; height: 500px;">
+
+        <e-size height="400" width="600"></e-size>
+        <e-chart-series type="Line">
+
+
+
+
+        </e-chart-series>
+
+    </ej-chart>
+    <script>
+        var chartData = [
+            { month: 'Jan', sales: 35 }, { month: 'Feb', sales: 28 }, { month: 'Mar', sales: 34 },
+            { month: 'Apr', sales: 32 }, { month: 'May', sales: 40 }, { month: 'Jun', sales: 32 },
+            { month: 'Jul', sales: 35 }, { month: 'Aug', sales: 55 }, { month: 'Sep', sales: 38 },
+            { month: 'Oct', sales: 30 }, { month: 'Nov', sales: 25 }, { month: 'Dec', sales: 32 }];
+
+        $("#container").ejChart({
+
+            series: [{
+                // ...
+                //Add datasource and set xName and yName
+                dataSource: chartData,
+                xName: "month",
+                yName: "sales"
+            }]
+
+            // ...
+        });</script>
+</div>
+@*<e-series dataSource="ViewBag.chatartDa" x-name="Month" y-name="Sales">
+    </e-series>*@

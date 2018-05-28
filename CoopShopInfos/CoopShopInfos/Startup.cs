@@ -31,7 +31,9 @@ namespace CoopShopInfos
 
             services.AddDbContext<CoopShopInfosContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("CoopShopInfosContext")));
+
             
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

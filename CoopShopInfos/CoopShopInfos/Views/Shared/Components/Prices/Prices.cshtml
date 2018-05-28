@@ -4,21 +4,24 @@
 }
 @model PricesViewModel
 
-
+<form asp-action="PricesChart" asp-controller="Prices">
+    <input type="submit" value="Graphique" class="btn btn-primary" />
+</form>
 <table class="table">
     <thead>
-        <tr>
-            <th>
-                Prix
-            </th>
-            <th>
-                Date
-            </th>
+    <tr>
+        <th>
+            Prix
+        </th>
+        <th>
+            Date
+        </th>
 
-        </tr>
+    </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Prices)
+    
+    @foreach (var item in Model.Prices)
     {
         <tr>
             <td>
@@ -26,23 +29,18 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PriceDateTime)
+
+                
+
             </td>
 
-        
-            @*<ej-date-picker id="@item.PriceId" value="@DateTime.Today"></ej-date-picker>
-            <ej-chart id="@item.PriceId">
-                <e-chart-series>
-                    <e-series datasource="ViewBag.chartData" x-name="Month" y-name="Sales" type="Line">
-                        
 
-                    </e-series>
-                </e-chart-series>
-                <e-size height="400" width="600"></e-size>
-            </ej-chart>*@
+
         </tr>
-}
+    }
 
 
     </tbody>
 </table>
+
 

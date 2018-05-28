@@ -40,6 +40,12 @@ namespace CoopShopInfos.Controllers
             }
         }
 
+
+        public IActionResult Products()
+        {
+            return RedirectToAction("ProductsList", "Products");
+        }
+
         public IActionResult Shops()
         {
             return RedirectToAction("Index", "Shops");

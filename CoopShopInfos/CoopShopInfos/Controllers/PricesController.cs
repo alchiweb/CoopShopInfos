@@ -148,5 +148,10 @@ namespace CoopShopInfos.Controllers
         {
             return _context.Price.Any(e => e.PriceId == id);
         }
+
+        public IActionResult PricesChart()
+        {
+            return View();
+        }
     }
 }

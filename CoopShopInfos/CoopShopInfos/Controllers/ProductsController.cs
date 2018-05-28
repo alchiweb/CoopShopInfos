@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using CoopShopInfos.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Syncfusion.JavaScript.DataVisualization;
 
@@ -23,6 +24,22 @@ namespace CoopShopInfos.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.Product.ToListAsync());
+        }
+
+        public async Task<IActionResult> ProductsList()
+        {
+            return View(await _context.Product.ToListAsync());
+        }
+        
+        [HttpPost]
+        public IActionResult ShowProduct(string codeBarre)
+        {
+            var values = new RouteValueDictionary
+            {
+
+                { "barcode", codeBarre }
+            };
+            return RedirectToAction("ShowProduct", "OpenFoodFacts", values);
         }
 
         // GET: Products/Details/5

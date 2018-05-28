@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model System.Collections.Generic.IEnumerable<CoopShopInfos.Models.Product>
+
+@{
+    ViewData["Title"] = "ProductsList";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Fiche Produit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <script type="text/javascript" src="\lib\jquery\dist\jquery.min.js"></script>
+    <script type="text/javascript" src="\lib\bootstrap\dist\js\bootstrap.min.js"></script>
+    <link rel="stylesheet" href="\lib\bootstrap\dist\css\cerulean\bootstrap.min.css">
+
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>
+                Liste des produits
+            </h2>
+        </div><!--/.col-md-6 -->
+    </div><!--row -->
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>
+                    <h3>Code Barre</h3>
+                </th>
+                <th>
+                    <h3>Nom du produit</h3>
+                </th>
+                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Barcode)
+                        
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                   
+                    <td>
+                        <a asp-action="ShowProduct" asp-controller="OpenFoodFacts" asp-route-id="@item.Barcode">Fiche Produit</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>

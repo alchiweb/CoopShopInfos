@@ -35,21 +35,27 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Products">Produits</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Shops">Magasins</a></li>
                 <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Categories">Catégories</a></li>
+                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Prices" asp-action="PricesChart">Graphique</a></li>
             </ul>
         </div>
     </div>
 </nav>
-<div style="padding: 40px">
-<h2>Bienvenue sur CoopShopinfos</h2>
-<h5>Le comparateur de prix des Oies Sauvages</h5>
-<h3 style="padding-top:40px">Pour entrer un nouveau code-barre, deux possibilités :</h3>
-<ul>
-    <li>Cliquer sur le bouton de gauche et utiliser la caméra</li>
-    <li>Entrer les chiffres du code-barre à la main</li>
-</ul>
-<h2>Scanner un code-barre</h2>
+<div class="container body-content">
+    
+        <h2>Bienvenue sur CoopShopinfos</h2>
+        <h5>Le comparateur de prix des Oies Sauvages</h5>
+        <h3 style="padding-top:40px">Pour entrer un nouveau code-barre, deux possibilités :</h3>
+    
+
+    <ul>
+        <li>Cliquer sur le bouton de gauche et utiliser la caméra</li>
+        <li>Entrer les chiffres du code-barre à la main</li>
+    </ul>
+    <h2>Scanner un code-barre</h2>
+
 <form asp-action="Index" method="post" id="form" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-8">

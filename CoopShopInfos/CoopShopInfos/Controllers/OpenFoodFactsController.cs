@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using OpenFoodAPI.Models;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -266,7 +267,15 @@ namespace CoopShopInfos.Controllers
             }
 
             // Add new ShopProduct object to DataContext
-            _context.Add(shopProductToFind);
+            try
+            {
+                _context.Add(shopProductToFind);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                
+            }
         }
 
         private async Task SaveContext()
