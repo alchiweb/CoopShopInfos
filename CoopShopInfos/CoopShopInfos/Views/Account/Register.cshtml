@@ -1,0 +1,32 @@
+﻿@model CoopShopInfos.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+<h2>Bienvenue sur CoopShopInfos, le comparateur de prix des oies Sauvages</h2>
+<h4>Nouveau par ici ?</h4>
+<h4>
+    Pour pouvoir continuer, veuillez vous créer un compte. Il vous faut un identifiant, un mot de passe et une adresse mail.
+</h4>
+<form asp-action="Register">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="UserName" class="control-label">Identifiant : </label>
+        <input asp-for="UserName" class="form-control" name="username" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+
+        <label asp-for="Password" class="control-label">Mot de passe : </label>
+        <input asp-for="Password" class="form-control" name="password" />
+        <h5>Le mot de masse doit comporter des chiffres et des caractères majuscules.</h5>
+        <span asp-validation-for="Password" class="text-danger"></span>
+
+        <label asp-for="ConfirmPassword" class="control-label">Confirmez le mot de passe : </label>
+        <input asp-for="ConfirmPassword" class="form-control" name="confirmPassword" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+        <label asp-for="Email" class="control-label">Email : </label>
+        <input asp-for="Email" class="form-control" name="email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+
+        <input type="submit" class="btn btn-default" value="Créer le compte" />
+    </div>
+</form>

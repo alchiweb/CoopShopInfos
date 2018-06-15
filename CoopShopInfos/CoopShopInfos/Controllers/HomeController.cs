@@ -17,8 +17,19 @@ namespace CoopShopInfos.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public IActionResult Index(Product model, IFormFile fichier, string codeBarre)
+        //{
+        //    return RedirectToAction("Register", "Account");
+        //}
+
+        public IActionResult Decode()
+        {
+            return View();
+        }
+
         [HttpPost]
-        public IActionResult Index(Product model, IFormFile fichier, string codeBarre)
+        public IActionResult Decode(Product model, IFormFile fichier, string codeBarre)
         {
             
             if (codeBarre != null)

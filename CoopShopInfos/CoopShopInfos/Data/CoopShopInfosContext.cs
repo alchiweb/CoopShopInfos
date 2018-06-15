@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using CoopShopInfos.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace CoopShopInfos.Models
 {
-    public class CoopShopInfosContext : DbContext
+    public class CoopShopInfosContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public CoopShopInfosContext (DbContextOptions<CoopShopInfosContext> options)
             : base(options)
@@ -23,6 +25,8 @@ namespace CoopShopInfos.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<ShopProduct>()
                 .HasKey(sp => new { sp.ShopId, sp.ProductId, sp.PriceId });
 

@@ -1,12 +1,7 @@
-﻿
-@model Product
-
-
+﻿@model CoopShopInfos.ViewModels.LoginViewModel
 @{
-    Layout = null;
+    ViewData["Title"] = "Bienvenue";
 }
-
-<!DOCTYPE html>
 
 <html>
 <head>
@@ -21,261 +16,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container">
-        <div class="navbar-header">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="true" aria-label="Toggle navigation" style="">
-            <span class="navbar-toggler-icon"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">CoopShopInfos</a>
-        </div>
-        <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Products">Produits</a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Shops">Magasins</a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Home" asp-action="Categories">Catégories</a></li>
-                <li class="nav-item"><a class="nav-link" asp-area="" asp-controller="Prices" asp-action="PricesChart">Graphique</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-<div class="container body-content">
-    
+
+    <div class="container body-content">
         <h2>Bienvenue sur CoopShopinfos</h2>
         <h5>Le comparateur de prix des Oies Sauvages</h5>
-        <h3 style="padding-top:40px">Pour entrer un nouveau code-barre, deux possibilités :</h3>
-    
+        <h4>Pour entrer ici, il faut montrer patte blanche !</h4>
+        <h4>Si vous ne possédez pas encore de compte, veuillez en créer un...</h4>
 
-    <ul>
-        <li>Cliquer sur le bouton de gauche et utiliser la caméra</li>
-        <li>Entrer les chiffres du code-barre à la main</li>
-    </ul>
-    <h2>Scanner un code-barre</h2>
+        
+        <form action="@Url.Action("Login", "Account")">
 
-<form asp-action="Index" method="post" id="form" enctype="multipart/form-data">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="input-group input-group-lg">
-                <span class="input-group-btn">
-                    <button class="btn btn-danger btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#livestream_scanner">
-                        <i class="fa fa-barcode fa-lg"></i>
-                    </button>
-                </span>
-                <input id="scanner_input" name="codeBarre" class="form-control" placeholder="Click the barcode button to scan an EAN..." type="text"/>
-                <span class="input-group-btn">
-                    <input type="submit" value="Fiche Produit" class="btn btn-primary btn-lg"/>
-                </span>
-            </div><!-- /input-group -->
-        </div> <!--/.col-lg-6 -->
-    </div><!-- /.row -->
+            @*<label asp-for="UserName" class="control-label">Identifiant : </label>
+            <input asp-for="UserName" class="form-control" name="username" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
 
-    <div class="modal" id="livestream_scanner" name="livestream_scanner">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">Barcode Scanner</h4>
-                </div>
-                <div class="modal-body" style="position: static">
-                    <div id="interactive" class="viewport"></div>
-                    <div class="error"></div>
-                </div>
-                <div class="modal-footer">
-                    <label class="btn btn-default pull-left">
-                        <i class="fa fa-camera"></i> Use camera app
-                        <input type="file" name="fichier" accept="image/*" capture="camera" class="hidden"/>
-                    </label>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            <label asp-for="Password" class="control-label">Mot de passe : </label>
+            <input asp-for="Password" class="form-control" name="password" />
+            <span asp-validation-for="Password" class="text-danger"></span>*@
 
-</form>
-    
-@*<form asp-action="Shops">
-    <h4>Mettre à jour la liste des magasins</h4>
-    <input type="submit" class="btn btn-default" value="Magasins"/>
-</form>
-<form asp-action="Categories">
-    <h4>Mettre à jour les catégories de produits</h4>
-    <input type="submit" class="btn btn-default" value="Categories"/>
-</form>*@
+            <input type="submit" class="btn btn-primary" value="Se connecter"/>
 
-<style>
-    #interactive.viewport {
-        position: relative;
-        width: 100%;
-        height: auto;
-        overflow: hidden;
-        text-align: center;
-    }
+        </form>
 
-    #interactive.viewport > canvas, #interactive.viewport > video {
-        max-width: 100%;
-        width: 100%;
-    }
-
-    canvas.drawing, canvas.drawingBuffer {
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-</style>
-<script type="text/javascript">
-    jQuery(document).ready(function() {
-//            $(".modal").show();
-        // Create the QuaggaJS config object for the live stream
-        var liveStreamConfig = {
-            inputStream: {
-                type: "LiveStream",
-                constraints: {
-                    width: { min: 640 },
-                    height: { min: 480 },
-                    aspectRatio: { min: 1, max: 100 },
-                    facingMode: "environment" // or "user" for the front camera
-                }
-            },
-            locator: {
-                patchSize: "large",
-                halfSample: true
-            },
-            numOfWorkers: (navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 4),
-            decoder: {
-                "readers": [
-                    { "format": "ean_reader", "config": {} }
-                ],
-            },
-            locate: true
-        };
-        // The fallback to the file API requires a different inputStream option.
-        // The rest is the same
-        var fileConfig = $.extend(
-            {},
-            liveStreamConfig,
-            {
-                inputStream: {
-                    size: 800
-                }
-            }
-        );
-        // Start the live stream scanner when the modal opens
-        $('#livestream_scanner').on('shown.bs.modal',
-            function(e) {
-                Quagga.init(
-                    liveStreamConfig,
-                    function(err) {
-                        if (err) {
-                            $('#livestream_scanner .modal-body .error')
-                                .html(
-                                    '<div class="alert alert-danger"><strong><i class="fa fa-exclamation-triangle"></i> ' +
-                                    err.name +
-                                    '</strong>: ' +
-                                    err.message +
-                                    '</div>');
-                            window.Quagga.stop();
-                            return;
-                        }
-                        window.Quagga.start();
-                    }
-                );
-            });
-
-        // Make sure, QuaggaJS draws frames an lines around possible
-        // barcodes on the live stream
-        Quagga.onProcessed(function(result) {
-            var drawingCtx = Quagga.canvas.ctx.overlay,
-                drawingCanvas = Quagga.canvas.dom.overlay;
-
-            if (result) {
-                if (result.boxes) {
-                    drawingCtx.clearRect(0,
-                        0,
-                        parseInt(drawingCanvas.getAttribute("width")),
-                        parseInt(drawingCanvas.getAttribute("height")));
-                    result.boxes.filter(function(box) {
-                        return box !== result.box;
-                    }).forEach(function(box) {
-                        Quagga.ImageDebug.drawPath(box,
-                            { x: 0, y: 1 },
-                            drawingCtx,
-                            { color: "green", lineWidth: 2 });
-                    });
-                }
-
-                if (result.box) {
-                    Quagga.ImageDebug.drawPath(result.box,
-                        { x: 0, y: 1 },
-                        drawingCtx,
-                        { color: "#00F", lineWidth: 2 });
-                }
-
-                if (result.codeResult && result.codeResult.code) {
-                    Quagga.ImageDebug.drawPath(result.line,
-                        { x: 'x', y: 'y' },
-                        drawingCtx,
-                        { color: 'red', lineWidth: 3 });
-                }
-            }
-        });
-
-        // Once a barcode had been read successfully, stop quagga and
-        // close the modal after a second to let the user notice where
-        // the barcode had actually been found.
-        Quagga.onDetected(function(result) {
-            if (result.codeResult.code) {
-                $('#scanner_input').val(result.codeResult.code);
-                Quagga.stop();
-                setTimeout(function() { $('#livestream_scanner').modal('hide'); }, 1000);
-            }
-        });
-
-        // Stop quagga in any case, when the modal is closed
-        $('#livestream_scanner').on('hide.bs.modal',
-            function() {
-                if (Quagga) {
-                    Quagga.stop();
-                }
-            });
-
-        // Call Quagga.decodeSingle() for every file selected in the
-        // file input
-        $("#livestream_scanner input:file").on("change",
-            function(e) {
-                if (e.target.files && e.target.files.length) {
-                    Quagga.decodeSingle($.extend({}, fileConfig, { src: URL.createObjectURL(e.target.files[0]) }),
-                        function(result) {});
-                }
-            });
-    });
-</script>
-
-
-<!-- <form asp-action="Index" method="post" id="form" enctype="multipart/form-data">
-
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="Barcode" class="control-label"></label>
-        <input asp-for="Barcode" class="form-control" name="barcode"/>
-        <span asp-validation-for="Barcode" class="text-danger"></span>
-
-
-        <input type="file" name="fichier"/>
-        <input type="submit" value="Upload"/>
-
+        <form asp-action="Register" asp-controller="Account">
+            <input type="submit" class="btn btn-default" value="Nouveau compte" />
+        </form>
     </div>
-
-    <div class="form-group">
-        <input type="submit" value="Show Product" class="btn btn-default"/>
-    </div>
-</form>
--->
-</div>
 </body>
 </html>
