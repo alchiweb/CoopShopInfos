@@ -9,14 +9,21 @@
 <form asp-action="Login" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-    <label asp-for="UserName" class="control-label">Identifiant : </label>
-    <input asp-for="UserName" class="form-control" name="username"/>
-    <span asp-validation-for="UserName" class="text-danger"></span>
-
-    <label asp-for="Password" class="control-label">Mot de passe : </label>
-    <input asp-for="Password" class="form-control" name="password"/>
-    <span asp-validation-for="Password" class="text-danger"></span>
-
-    <input type="submit" class="btn btn-default" value="Connexion"/>
+    <div class="form-group">
+        <label asp-for="UserName" class="control-label">Identifiant : </label>
+        <input asp-for="UserName" class="form-control" name="username" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label">Mot de passe : </label>
+        <input asp-for="Password" class="form-control" name="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <p>
+            <a asp-action="ForgotPassword">Mot de passe oublié ?</a>
+        </p>
+    </div>
+    <input type="submit" class="btn btn-default" value="Connexion" />
 </form>
 

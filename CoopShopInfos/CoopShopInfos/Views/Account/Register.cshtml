@@ -7,7 +7,7 @@
 <h4>
     Pour pouvoir continuer, veuillez vous créer un compte. Il vous faut un identifiant, un mot de passe et une adresse mail.
 </h4>
-<form asp-action="Register">
+<form asp-action="Register" method ="Post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="UserName" class="control-label">Identifiant : </label>

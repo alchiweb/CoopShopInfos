@@ -90,13 +90,13 @@ namespace CoopShopInfos.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                var confrimationCode =
+                var confirmationCode =
                     await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
                 var callbackurl = Url.Action(
                     controller: "Account",
                     action: "ConfirmEmail",
-                    values: new { userId = user.Id, code = confrimationCode },
+                    values: new { userId = user.Id, code = confirmationCode },
                     protocol: Request.Scheme);
 
                 await _emailSender.SendEmailAsync(
@@ -110,6 +110,7 @@ namespace CoopShopInfos.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -126,12 +127,14 @@ namespace CoopShopInfos.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(string email)
         {
